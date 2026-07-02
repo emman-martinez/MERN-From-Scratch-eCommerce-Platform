@@ -5,6 +5,6 @@ describe("App", () => {
   it("renders the app title", () => {
     render(<App />);
 
-    expect(screen.getByText(/proshop frontend/i)).toBeInTheDocument();
+    expect(screen.getByText(/welcome to proshop/i)).toBeInTheDocument();
   });
 });
