@@ -17,5 +17,17 @@
   "bugs": {
     "url": "https://github.com/emman-martinez/MERN-From-Scratch-eCommerce-Platform/issues"
   },
-  "homepage": "https://github.com/emman-martinez/MERN-From-Scratch-eCommerce-Platform#readme"
+  "homepage": "https://github.com/emman-martinez/MERN-From-Scratch-eCommerce-Platform#readme",
+  "devDependencies": {
+    "lint-staged": "^17.0.8"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx,js,jsx}": [
+      "npm run lint --workspace frontend -- --fix",
+      "prettier --write"
+    ],
+    "frontend/**/*.{json,css,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
 }
