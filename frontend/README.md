@@ -15,7 +15,6 @@ Modern React frontend for a MERN eCommerce platform.
 - MSW
 - ESLint
 - Prettier
-- Husky
 - Docker
 - GitHub Actions
 
