@@ -1,9 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import Header from "../../../components/layout/Header";
+import { MemoryRouter } from "react-router-dom";
+import Header from "../../../../components/layout/Header";
 
 describe("Header", () => {
   it("renders the brand and navigation links", () => {
-    render(<Header />);
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>,
+    );
 
     expect(screen.getByRole("img", { name: /proshop/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /proshop/i })).toHaveAttribute("href", "/");
