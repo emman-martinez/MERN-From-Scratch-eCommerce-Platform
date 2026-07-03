@@ -1,9 +1,15 @@
 import { Row, Col } from "react-bootstrap";
-import products from "../../mockData/products";
+import { useQuery } from "@tanstack/react-query";
 import Product from "../../components/Product";
 import { copy } from "../../copy";
+import { fetchProducts, productKeys } from "../../api/products";
 
 const HomeScreen = () => {
+  const { data: products = [] } = useQuery({
+    queryKey: productKeys.all,
+    queryFn: fetchProducts,
+  });
+
   return (
     <>
       <h1>{copy.home.title}</h1>
