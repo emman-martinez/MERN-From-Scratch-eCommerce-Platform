@@ -1,0 +1,41 @@
+{
+  "name": "proshop",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace frontend\" \"npm run dev --workspace backend\"",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
+    "format": "prettier . --write",
+    "typecheck": "npm run typecheck --workspaces",
+    "docker:up": "docker compose up --build",
+    "docker:up:dev": "docker compose up -d",
+    "docker:up:renew": "docker compose up -d --build -V",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:logs:backend": "docker logs -f proshop-backend-1",
+    "docker:clean": "docker compose down -v",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write"
+    ],
+    "backend/**/*.{js,ts}": [
+      "eslint --fix --config backend/eslint.config.js"
+    ],
+    "frontend/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --config frontend/eslint.config.js"
+    ]
+  }
+}
