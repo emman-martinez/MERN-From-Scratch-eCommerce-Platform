@@ -1,18 +1,12 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
-import { useQuery } from "@tanstack/react-query";
 import Rating from "../../components/Rating";
 import { copy } from "../../copy";
-import { fetchProduct, productKeys } from "../../api/products";
+import { useGetProductById } from "../../hooks/useGetProductById";
 
 const ProductScreen = () => {
   const { id: productId } = useParams<{ id: string }>();
-  const { data: product } = useQuery({
-    queryKey: productKeys.detail(productId ?? ""),
-    queryFn: () => fetchProduct(productId ?? ""),
-    enabled: Boolean(productId),
-  });
+  const { data: product } = useGetProductById(productId ?? "");
 
   return (
     <>

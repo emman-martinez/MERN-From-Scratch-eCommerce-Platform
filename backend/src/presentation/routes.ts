@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { HealthRoutes } from './health/routes.ts';
+import { ProductsRoutes } from './products/routes.ts';
 
 export class AppRoutes {
   static get routes(): Router {
@@ -7,7 +8,7 @@ export class AppRoutes {
 
     // Define your routes here
     router.use('/api/health', HealthRoutes.routes);
-    // router.use('/api/products', ProductRoutes.routes);
+    router.use('/api/products', ProductsRoutes.routes);
 
     return router;
   }

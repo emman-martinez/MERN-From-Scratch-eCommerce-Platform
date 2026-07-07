@@ -5,7 +5,14 @@ import { Provider } from "react-redux";
 import { router } from "../Router";
 import { store } from "../../store";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export function AppProviders() {
   return (

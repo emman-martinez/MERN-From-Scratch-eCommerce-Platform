@@ -1,15 +1,12 @@
-import products from "../mockData/products";
 import type { Product } from "../types/product";
+import { api } from "./axios";
 
-export const productKeys = {
-  all: ["products"] as const,
-  detail: (id: string) => ["product", id] as const,
+export const getProducts = async (): Promise<Product[]> => {
+  const response = await api.get<Product[]>("/api/products");
+  return response.data;
 };
 
-export async function fetchProducts(): Promise<Product[]> {
-  return products;
-}
-
-export async function fetchProduct(id: string): Promise<Product | undefined> {
-  return products.find((product) => product._id === id);
-}
+export const getProductById = async (id: string): Promise<Product> => {
+  const response = await api.get<Product>(`/api/products/${id}`);
+  return response.data;
+};

@@ -21,6 +21,14 @@ export class Server {
   }
 
   async start() {
+    if (process.env.NODE_ENV === 'development') {
+      this.app.disable('etag');
+      this.app.use((_req, res, next) => {
+        res.set('Cache-Control', 'no-store');
+        next();
+      });
+    }
+
     //* Middlewares
     this.app.use(cors()); // cors: Cross-Origin Resource Sharing
     this.app.use(express.json()); // raw
