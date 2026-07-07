@@ -82,6 +82,61 @@ MongoDB Compass:
 mongodb://admin:supersecret@localhost:27017/proshop?authSource=admin
 ```
 
+## MongoDB Configuration
+
+There are two main ways to run MongoDB with this project:
+
+- Local development with Docker: MongoDB runs in the `mongo` container from
+  `docker-compose.yml`. You do not need MongoDB installed directly on your
+  computer.
+- MongoDB Atlas: MongoDB runs in the cloud, and the app connects through an
+  Atlas `mongodb+srv://...` connection string.
+
+When using Docker local MongoDB, the backend container must use the Docker
+service name `mongo` as the host:
+
+```env
+MONGO_URI=mongodb://admin:supersecret@mongo:27017/proshop?authSource=admin
+MONGO_DATABASE=proshop
+```
+
+That URI works from inside Docker because the backend and MongoDB containers are
+on the same Compose network.
+
+For MongoDB Compass on your machine, use `localhost` instead because Compass is
+running outside Docker:
+
+```text
+mongodb://admin:supersecret@localhost:27017/proshop?authSource=admin
+```
+
+Both URIs point to the same local Docker MongoDB data, but they are used from
+different places:
+
+```text
+backend container -> mongo:27017
+your computer/Compass -> localhost:27017
+```
+
+To use MongoDB Atlas, replace the active `MONGO_URI` in `.env` with your Atlas
+connection string and keep `MONGO_DATABASE` as the database name:
+
+```env
+MONGO_URI=mongodb+srv://user:password@proshop-cluster.xxxxx.mongodb.net/proshop?retryWrites=true&w=majority&appName=proshop-cluster
+MONGO_DATABASE=proshop
+```
+
+To open the same Atlas database in MongoDB Compass, use the same Atlas
+connection string in Compass. If the backend and Compass both use the Atlas URI,
+both tools point to the same remote database:
+
+```text
+mongodb+srv://user:password@proshop-cluster.xxxxx.mongodb.net/proshop?retryWrites=true&w=majority&appName=proshop-cluster
+```
+
+Only keep one `MONGO_URI` active at a time. Leave the other examples commented
+out so it is clear whether the backend is using local Docker MongoDB or Atlas.
+
 ## Live Reload
 
 The Docker setup mounts the local `backend` and `frontend` folders into their containers.
