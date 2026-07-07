@@ -1,15 +1,22 @@
-import cors from 'cors';
-import express from 'express';
-import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import { env } from './config/env.ts';
+import { MongoDatabase } from './data/mongo/mongo-database.ts';
+import { AppRoutes } from './presentation/routes.ts';
+import { Server } from './presentation/server.ts';
 
-export const app = express();
+(async () => {
+  main();
+})();
 
-app.use(cors());
-app.use(express.json());
+async function main() {
+  await MongoDatabase.connect({
+    dbName: env.MONGO_DB_NAME,
+    mongoUrl: env.MONGO_URI,
+  });
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
+  const server = new Server({
+    port: env.PORT,
+    routes: AppRoutes.routes,
+  });
 
-app.use(notFound);
-app.use(errorHandler);
+  server.start();
+}

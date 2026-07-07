@@ -41,6 +41,9 @@ services:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
       MONGO_URI: ${MONGO_URI}
+      MONGO_DB_NAME: ${MONGO_DATABASE}
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
 
     depends_on:
       mongo:
