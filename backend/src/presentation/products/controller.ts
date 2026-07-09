@@ -4,12 +4,18 @@ import { ProductService } from '../../services/product.service.ts';
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
+  // @desc Fetch all products
+  // @route GET /api/products
+  // @access Public
   async getProducts(_req: Request, res: Response) {
     const products = await this.productService.getProducts();
 
     res.json(products);
   }
 
+  // @desc Fetch single product
+  // @route GET /api/products/:id
+  // @access Public
   async getProductById(req: Request, res: Response) {
     const productId = String(req.params.id);
     const product = await this.productService.getProductById(productId);
