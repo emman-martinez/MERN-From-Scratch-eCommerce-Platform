@@ -19,7 +19,9 @@
     "docker:logs": "docker compose logs -f",
     "docker:logs:backend": "docker logs -f proshop-backend-1",
     "docker:clean": "docker compose down -v",
-    "prepare": "husky"
+    "prepare": "husky",
+    "data:import": "node backend/src/data/seed/seed.ts",
+    "data:destroy": "node backend/src/data/seed/seed.ts -d"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
