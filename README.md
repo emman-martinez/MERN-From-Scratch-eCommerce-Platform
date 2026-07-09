@@ -126,6 +126,18 @@ MONGO_URI=mongodb+srv://user:password@proshop-cluster.xxxxx.mongodb.net/proshop?
 MONGO_DATABASE=proshop
 ```
 
+Atlas also needs to allow the IP address that is connecting to the cluster.
+For local development, you can go to Atlas > Network Access and add:
+
+```text
+0.0.0.0/0
+```
+
+This allows connections from any IP address, which is convenient when your home
+network IP changes. Use it only for development. Before going to production,
+remove `0.0.0.0/0` and allow only the specific server, hosting provider, or
+trusted IP addresses that should connect to the database.
+
 To open the same Atlas database in MongoDB Compass, use the same Atlas
 connection string in Compass. If the backend and Compass both use the Atlas URI,
 both tools point to the same remote database:
