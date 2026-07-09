@@ -7,10 +7,17 @@ export const notFound: RequestHandler = (req, res, next) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let message = err.message;
+
+  // Check for Mongoose bad ObjectId error
+  if (err.name === 'CastError' && err.kind === 'ObjectId') {
+    statusCode = 404;
+    message = 'Resource not found';
+  }
 
   res.status(statusCode).json({
-    message: err.message,
+    message,
     stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   });
 };

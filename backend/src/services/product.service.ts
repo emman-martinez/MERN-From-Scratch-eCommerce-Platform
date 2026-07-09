@@ -13,11 +13,7 @@ export class ProductService {
   }
 
   async getProductById(id: string) {
-    try {
-      const product = await ProductModel.findById(id);
-      return product;
-    } catch {
-      throw new Error('Error fetching product');
-    }
+    const product = await ProductModel.findById(id);
+    return product;
   }
 }
