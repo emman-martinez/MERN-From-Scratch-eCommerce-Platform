@@ -4,12 +4,12 @@ import { copy } from "../../copy";
 import { useGetProducts } from "../../hooks/useGetProducts";
 
 const HomeScreen = () => {
-  const { data: products = [], error, isLoading } = useGetProducts();
+  const { data: products = [], error, isPending } = useGetProducts();
 
   return (
     <>
-      {isLoading ? (
-        <h2>Loading...</h2>
+      {isPending ? (
+        <h2>{copy.home.loading}</h2>
       ) : error ? (
         <p>{error.message}</p>
       ) : (

@@ -8,5 +8,5 @@ export const useGetProducts = () => {
     queryFn: getProducts,
   });
 
-  return { data, error, isLoading: isPending };
+  return { data, error, isPending };
 };

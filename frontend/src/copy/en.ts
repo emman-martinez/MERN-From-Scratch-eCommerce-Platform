@@ -8,6 +8,7 @@ export const copy = {
   },
   home: {
     title: "Latest Products",
+    loading: "Loading products...",
   },
   product: {
     goBack: "Go Back",
@@ -18,5 +19,6 @@ export const copy = {
     outOfStock: "Out of Stock",
     addToCart: "Add To Cart",
     description: "Description",
+    loading: "Loading product details...",
   },
 } as const;
