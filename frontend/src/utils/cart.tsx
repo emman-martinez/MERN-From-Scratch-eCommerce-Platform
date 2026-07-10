@@ -1,14 +1,8 @@
+import type { CartState } from "../types/cart";
+
 export const addDecimals = (num: number) => {
   return (Math.round(num * 100) / 100).toFixed(2);
 };
-
-interface CartState {
-  cartItems: { price: number; qty: number }[];
-  itemsPrice: string;
-  shippingPrice: string;
-  taxPrice: string;
-  totalPrice: string;
-}
 
 export const updateCart = (state: CartState) => {
   // Calculate items price
