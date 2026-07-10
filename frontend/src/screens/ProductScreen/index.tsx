@@ -3,6 +3,8 @@ import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../../components/Rating";
 import { copy } from "../../copy";
 import { useGetProductById } from "../../hooks/useGetProductById";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
 
 const ProductScreen = () => {
   const { id: productId } = useParams<{ id: string }>();
@@ -14,9 +16,9 @@ const ProductScreen = () => {
         {copy.product.goBack}
       </Link>
       {isPending ? (
-        <h2>{copy.product.loading}</h2>
+        <Loader />
       ) : error ? (
-        <p>{error.message}</p>
+        <Message variant="danger">{error.message}</Message>
       ) : (
         <>
           <Row>

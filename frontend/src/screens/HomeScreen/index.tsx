@@ -1,7 +1,9 @@
 import { Row, Col } from "react-bootstrap";
+import Loader from "../../components/Loader";
 import Product from "../../components/Product";
 import { copy } from "../../copy";
 import { useGetProducts } from "../../hooks/useGetProducts";
+import Message from "../../components/Message";
 
 const HomeScreen = () => {
   const { data: products = [], error, isPending } = useGetProducts();
@@ -9,9 +11,9 @@ const HomeScreen = () => {
   return (
     <>
       {isPending ? (
-        <h2>{copy.home.loading}</h2>
+        <Loader />
       ) : error ? (
-        <p>{error.message}</p>
+        <Message variant="danger">{error.message}</Message>
       ) : (
         <>
           <h1>{copy.home.title}</h1>
