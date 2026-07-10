@@ -29,8 +29,7 @@ const cartSlice = createSlice({
         state.cartItems.reduce(
           // acc is the accumulator, item is the current item in the array
           // The reduce function takes a callback function and an initial value (0 in this case)
-          (acc: number, item: { price: number; quantity: number }) =>
-            acc + item.price * item.quantity,
+          (acc: number, item: { price: number; qty: number }) => acc + item.price * item.qty,
           0,
         ),
       );

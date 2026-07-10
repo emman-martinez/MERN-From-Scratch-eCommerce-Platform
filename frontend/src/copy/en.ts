@@ -20,5 +20,6 @@ export const copy = {
     addToCart: "Add To Cart",
     description: "Description",
     loading: "Loading product details...",
+    qty: "Qty",
   },
 } as const;
