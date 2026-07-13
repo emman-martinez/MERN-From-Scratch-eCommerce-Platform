@@ -1,15 +1,15 @@
 import type { ChangeEvent } from "react";
-import { Link /*, useNavigate */ } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Form, Button, Card } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { addToCart } from "../../store/slices/cartSlice";
+import { addToCart, removeFromCart } from "../../store/slices/cartSlice";
 import Message from "../../components/Message";
 import type { CartItem, FormControlElement } from "../../types/cart";
 import { copy } from "../../copy";
 
 const CartScreen = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -20,6 +20,14 @@ const CartScreen = () => {
   ) => {
     const qty = Number(event.target.value);
     dispatch(addToCart({ ...product, qty }));
+  };
+
+  const removeFromCartHandler = async (id: number) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const checkoutHandler = () => {
+    navigate("/login?redirect=shipping");
   };
 
   return (
@@ -59,7 +67,7 @@ const CartScreen = () => {
                     <Button
                       type="button"
                       variant="light"
-                      // onClick={() => dispatch(removeFromCart(item.product))}
+                      onClick={() => removeFromCartHandler(item._id)}
                     >
                       <FaTrash />
                     </Button>
@@ -85,7 +93,12 @@ const CartScreen = () => {
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type="button" className="btn-block" disabled={cartItems.length === 0}>
+              <Button
+                type="button"
+                className="btn-block"
+                disabled={cartItems.length === 0}
+                onClick={checkoutHandler}
+              >
                 {copy.cart.checkout}
               </Button>
             </ListGroup.Item>
