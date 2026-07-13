@@ -22,4 +22,12 @@ export const copy = {
     loading: "Loading product details...",
     qty: "Qty",
   },
+  cart: {
+    title: "Shopping Cart",
+    empty: "Your cart is empty",
+    goBack: "Go Back",
+    subtotal: "Subtotal",
+    items: "items",
+    checkout: "Proceed To Checkout",
+  },
 } as const;
