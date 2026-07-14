@@ -22,4 +22,24 @@ export class UserService {
 
     return user;
   };
+
+  registerUser = async (name: string, email: string, password: string): Promise<UserDocument> => {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const existingUser = await UserModel.findOne({ email: normalizedEmail });
+
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+
+    const user = new UserModel({
+      name,
+      email: normalizedEmail,
+      password,
+    });
+
+    await user.save();
+
+    return user;
+  };
 }
