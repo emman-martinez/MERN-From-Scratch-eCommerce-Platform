@@ -73,14 +73,55 @@ export class UserController {
   // @route GET /api/users/profile
   // @access Private
   getUserProfile = async (req: Request, res: Response) => {
-    res.send('Get user profile');
+    const userId = req.user?._id;
+
+    if (!userId) {
+      res.status(401);
+      throw new Error('User not authenticated');
+    }
+
+    const user = await this.userService.getUserProfile(userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
   };
 
   // @desc Update user profile
   // @route PUT /api/users/profile
   // @access Private
   updateUserProfile = async (req: Request, res: Response) => {
-    res.send('Update user profile');
+    const userId = req.user?._id;
+
+    if (!userId) {
+      res.status(401);
+      throw new Error('User not authenticated');
+    }
+
+    const { name, email, password } = req.body;
+    const userExist = await this.userService.getUserProfile(userId);
+
+    if (!userExist) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    const user = await this.userService.updateUserProfile(userExist, name, email, password);
+
+    res.status(200).json({
+      _id: user?._id,
+      name: user?.name,
+      email: user?.email,
+      isAdmin: user?.isAdmin,
+    });
   };
 
   // @desc Get all users

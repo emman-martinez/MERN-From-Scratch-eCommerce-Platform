@@ -1,3 +1,4 @@
+import type { Types } from 'mongoose';
 import { UserModel, type UserDocument } from '../data/mongo/models/user.model.ts';
 
 export class UserService {
@@ -37,6 +38,34 @@ export class UserService {
       email: normalizedEmail,
       password,
     });
+
+    await user.save();
+
+    return user;
+  };
+
+  getUserProfile = async (userId: Types.ObjectId): Promise<UserDocument | null> => {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  };
+
+  updateUserProfile = async (
+    user: UserDocument,
+    name: string,
+    email: string,
+    password?: string,
+  ): Promise<UserDocument | null> => {
+    user.name = name || user.name;
+    user.email = email || user.email;
+
+    if (password) {
+      user.password = password;
+    }
 
     await user.save();
 
