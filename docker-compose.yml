@@ -42,6 +42,7 @@ services:
       PORT: ${PORT}
       MONGO_URI: ${MONGO_URI}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
 

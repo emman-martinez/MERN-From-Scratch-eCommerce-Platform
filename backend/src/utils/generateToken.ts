@@ -10,6 +10,7 @@ export const generateToken = (res: Response, userId: Types.ObjectId) => {
     expiresIn: '30d',
   });
 
+  // Set the token in an HTTP-only cookie
   res.cookie('jwt', token, {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',

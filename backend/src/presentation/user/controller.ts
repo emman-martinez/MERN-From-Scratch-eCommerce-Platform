@@ -2,11 +2,7 @@ import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { UserService } from '../../services/user.service.ts';
 import { generateToken } from '../../utils/generateToken.ts';
-
-const loginSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1, 'Password is required'),
-});
+import { loginSchema } from '../../schemas/index.ts';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
