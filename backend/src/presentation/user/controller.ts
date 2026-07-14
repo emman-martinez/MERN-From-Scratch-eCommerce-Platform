@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { UserService } from '../../services/user.service.ts';
-import { generateToken } from '../../utils/generateToken.ts';
 import { loginSchema } from '../../schemas/index.ts';
+import { clearToken, generateToken } from '../../utils/index.ts';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -50,7 +50,8 @@ export class UserController {
   // @route POST /api/users/logout
   // @access Private
   logoutUser = async (req: Request, res: Response) => {
-    res.send('Logout user');
+    clearToken(res);
+    res.status(200).json({ message: 'User logged out successfully' });
   };
 
   // @desc Get user profile
