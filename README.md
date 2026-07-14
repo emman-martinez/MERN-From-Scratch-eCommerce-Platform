@@ -20,9 +20,23 @@ copy .env.example .env
 
 ## Environment Variables
 
-The application reads environment variables from the root `.env` file. Start
-by copying `.env.example`, then replace its example values with your local
-configuration.
+The project uses a single environment file: `.env` in the project root, next
+to the root `package.json`. Both Docker Compose and the backend read their
+configuration from this file. Do not create or use `backend/.env`.
+
+The backend resolves the root `.env` explicitly, so it works the same whether
+it is started from the project root, from `backend/`, or from an editor.
+
+The `.env` file contains local credentials and is intentionally ignored by
+Git. Therefore, after cloning the project on a new computer, create it from the
+committed example:
+
+```powershell
+copy .env.example .env
+```
+
+Then replace the example values in `.env` with the configuration for that
+computer. Never commit the resulting `.env` file.
 
 Authentication requires `JWT_SECRET`:
 
@@ -86,6 +100,112 @@ Stop the containers and remove the MongoDB volume:
 npm run docker:clean
 ```
 
+### Start Docker From Scratch
+
+Use this procedure when testing the project on another computer, when the
+MongoDB volume was created with old credentials, or when you want a completely
+empty local database.
+
+> **Warning:** this permanently deletes the local MongoDB data stored by this
+> project. It does not delete the source code or the root `.env` file.
+
+From the project root, stop the containers and remove their volumes:
+
+```powershell
+npm run docker:clean
+```
+
+Confirm that the root `.env` has the desired values. When using the local
+Docker MongoDB, the credentials used in `MONGO_URI` must match
+`MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`, and the project
+uses `MONGO_DB_NAME` everywhere for the database name.
+
+Then rebuild the images and create new containers and volumes:
+
+```powershell
+npm run docker:up
+```
+
+MongoDB applies its `MONGO_INITDB_*` settings only when it initializes an empty
+volume. Changing those values in `.env` does not update users in an existing
+MongoDB volume; run `npm run docker:clean` before starting again when those
+credentials change.
+
+In another terminal, check that every service started successfully:
+
+```powershell
+docker compose ps
+npm run docker:logs:backend
+```
+
+The commands have different purposes:
+
+- `npm run docker:down` stops and removes containers but preserves MongoDB
+  data.
+- `npm run docker:up:renew` rebuilds images and renews anonymous volumes such
+  as container `node_modules`; it preserves the named MongoDB data volume.
+- `npm run docker:clean` stops containers and deletes the MongoDB data volume,
+  allowing MongoDB to initialize again from the current `.env` values.
+
+### Fresh Setup on Another Computer
+
+After cloning the repository, run:
+
+```powershell
+copy .env.example .env
+npm install
+npm run docker:up
+```
+
+Edit the root `.env` before the final command. Do not create `backend/.env`.
+If that computer already ran an older version of the project, run
+`npm run docker:clean` before `npm run docker:up`.
+
+### Seed the Database
+
+The seed imports the sample users and products included in the repository.
+Importing the seed first deletes the existing orders, products, and users in
+the configured database, so do not run it against data you need to preserve.
+
+When the project is running with Docker, execute the seed inside the backend
+container. This uses the container connection configured with the MongoDB host
+name `mongo`:
+
+```powershell
+docker compose exec backend node src/data/seed/seed.ts
+```
+
+To delete the orders, products, and users without importing the samples again:
+
+```powershell
+docker compose exec backend node src/data/seed/seed.ts -d
+```
+
+When running the backend directly on the computer instead of Docker, use the
+root npm scripts:
+
+```powershell
+npm run data:import
+npm run data:destroy
+```
+
+For direct local execution, `MONGO_URI` must be reachable from the computer;
+use `localhost` for a local Docker MongoDB port or use an Atlas connection
+string. The host name `mongo` only resolves between Docker Compose containers.
+
+After a completely clean Docker start, a common sequence is:
+
+```powershell
+npm run docker:clean
+npm run docker:up
+```
+
+Then, from another terminal:
+
+```powershell
+docker compose exec backend node src/data/seed/seed.ts
+```
+
 ## Local URLs
 
 Frontend:
@@ -121,7 +241,7 @@ service name `mongo` as the host:
 
 ```env
 MONGO_URI=mongodb://admin:supersecret@mongo:27017/proshop?authSource=admin
-MONGO_DATABASE=proshop
+MONGO_DB_NAME=proshop
 ```
 
 That URI works from inside Docker because the backend and MongoDB containers are
@@ -143,11 +263,11 @@ your computer/Compass -> localhost:27017
 ```
 
 To use MongoDB Atlas, replace the active `MONGO_URI` in `.env` with your Atlas
-connection string and keep `MONGO_DATABASE` as the database name:
+connection string and keep `MONGO_DB_NAME` as the database name:
 
 ```env
 MONGO_URI=mongodb+srv://user:password@proshop-cluster.xxxxx.mongodb.net/proshop?retryWrites=true&w=majority&appName=proshop-cluster
-MONGO_DATABASE=proshop
+MONGO_DB_NAME=proshop
 ```
 
 Atlas also needs to allow the IP address that is connecting to the cluster.

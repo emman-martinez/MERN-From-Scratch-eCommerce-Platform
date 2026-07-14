@@ -1,12 +1,9 @@
-import dotenv from 'dotenv';
 import 'colors';
 import users from '../users.ts';
 import products from '../products.ts';
 import { OrderModel, ProductModel, UserModel } from '../mongo/models/index.ts';
 import { MongoDatabase } from '../mongo/mongo-database.ts';
 import { env } from '../../config/env.ts';
-
-dotenv.config(); // Load environment variables from .env file
 
 const importData = async () => {
   try {
