@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserController } from './controller.ts';
 import asyncHandler from '../../middleware/asyncHandler.ts';
 import { UserService } from '../../services/user.service.ts';
+import { protect, admin } from '../../middleware/authMiddleware.ts';
 
 export class UserRoutes {
   static get routes(): Router {
@@ -12,18 +13,18 @@ export class UserRoutes {
     router
       .route('/')
       .post(asyncHandler(controller.registerUser.bind(controller)))
-      .get(asyncHandler(controller.getUsers.bind(controller)));
+      .get(protect, admin, controller.getUsers);
     router.post('/logout', asyncHandler(controller.logoutUser.bind(controller)));
-    router.post('/login', asyncHandler(controller.authUser.bind(controller)));
+    router.post('/auth', asyncHandler(controller.authUser.bind(controller)));
     router
       .route('/profile')
-      .get(asyncHandler(controller.getUserProfile.bind(controller)))
-      .put(asyncHandler(controller.updateUserProfile.bind(controller)));
+      .get(protect, controller.getUserProfile)
+      .put(protect, controller.updateUserProfile);
     router
       .route('/:id')
-      .get(asyncHandler(controller.getUserById.bind(controller)))
-      .delete(asyncHandler(controller.deleteUser.bind(controller)))
-      .put(asyncHandler(controller.updateUser.bind(controller)));
+      .get(protect, admin, controller.getUserById)
+      .delete(protect, admin, controller.deleteUser)
+      .put(protect, admin, controller.updateUser);
 
     return router;
   }

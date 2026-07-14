@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Router } from 'express';
 import type { Server as HttpServer } from 'http';
+import cookieParser from 'cookie-parser';
 import { errorHandler, notFound } from '../middleware/errorMiddleware.ts';
 
 interface Options {
@@ -33,6 +34,9 @@ export class Server {
     this.app.use(cors()); // cors: Cross-Origin Resource Sharing
     this.app.use(express.json()); // raw
     this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
+
+    // Cooqkie parser middleware allows us to parse cookies from the request headers and populate the req.cookies object with key-value pairs representing the cookies sent by the client. This is useful for handling authentication, session management, and other scenarios where cookies are used to store information on the client side.
+    this.app.use(cookieParser());
 
     //* Routes
     this.app.use(this.routes);

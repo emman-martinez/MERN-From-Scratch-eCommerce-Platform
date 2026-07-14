@@ -18,6 +18,30 @@ Create your local environment file:
 copy .env.example .env
 ```
 
+## Environment Variables
+
+The application reads environment variables from the root `.env` file. Start
+by copying `.env.example`, then replace its example values with your local
+configuration.
+
+Authentication requires `JWT_SECRET`:
+
+```env
+JWT_SECRET=replace-with-a-long-random-secret
+```
+
+Use a long, random value and never commit your real secret. The backend uses
+this value to sign and verify authentication tokens. When running with Docker,
+`docker-compose.yml` passes `JWT_SECRET` from the root `.env` file into the
+backend container.
+
+After changing environment variables for an existing container, recreate the
+backend so it receives the new values:
+
+```powershell
+docker compose up -d --force-recreate backend
+```
+
 ## Run With Docker
 
 Start the containers in detached mode:
