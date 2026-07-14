@@ -1,5 +1,12 @@
 import type { Request, Response } from 'express';
+import { z } from 'zod';
 import { UserService } from '../../services/user.service.ts';
+import { generateToken } from '../../utils/generateToken.ts';
+
+const loginSchema = z.object({
+  email: z.email(),
+  password: z.string().min(1, 'Password is required'),
+});
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -8,7 +15,32 @@ export class UserController {
   // @route POST /api/users/login
   // @access Public
   authUser = async (req: Request, res: Response) => {
-    res.send('Auth user');
+    const parsedBody = loginSchema.safeParse(req.body);
+
+    if (!parsedBody.success) {
+      res.status(400).json({
+        message: 'Invalid login data',
+        errors: z.flattenError(parsedBody.error).fieldErrors,
+      });
+      return;
+    }
+
+    const { email, password } = parsedBody.data;
+    const user = await this.userService.authenticateUser(email, password);
+
+    if (!user) {
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+
+    generateToken(res, user._id);
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
   };
 
   // @desc Register a new user
