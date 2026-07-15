@@ -1,17 +1,51 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { isAxiosError } from "axios";
+import { useUserLoginMutation } from "../../hooks/useUserLogin";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { copy } from "../../copy/en";
 import FormContainer from "../../components/FormContainer";
+import Loader from "../../components/Loader";
+import { setCredentials } from "../../store/slices/authSlice";
+import { toast } from "react-toastify";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, isLoading } = useUserLoginMutation();
+  const dispatch = useAppDispatch();
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const redirect = searchParams.get("redirect") || "/";
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle login logic here
+    login(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          dispatch(setCredentials(data));
+          navigate(redirect);
+        },
+        onError: (error) => {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data.message
+            : undefined;
+
+          toast.error(message || "Login failed");
+        },
+      },
+    );
   };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [userInfo, redirect]);
 
   return (
     <FormContainer>
@@ -37,16 +71,20 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary" className="mt-2">
+        <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
           {copy.login.signIn}
         </Button>
-
-        <Row className="py-3">
-          <Col>
-            {copy.login.newCustomer} <Link to="/register">{copy.login.register}</Link>
-          </Col>
-        </Row>
+        {isLoading && <Loader />}
       </Form>
+
+      <Row className="py-3">
+        <Col>
+          {copy.login.newCustomer}{" "}
+          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+            {copy.login.register}
+          </Link>
+        </Col>
+      </Row>
     </FormContainer>
   );
 };

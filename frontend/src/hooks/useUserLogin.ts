@@ -2,9 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { userLogin } from "../api/users";
 import type { UserLogin } from "../types/users";
 
-export const useUserLogin = ({ email, password }: UserLogin) => {
+export const useUserLoginMutation = () => {
   const mutation = useMutation({
-    mutationFn: () => userLogin({ email, password }),
+    mutationFn: (credentials: UserLogin) => userLogin(credentials),
   });
 
   return {

@@ -39,6 +39,7 @@ services:
 
     environment:
       NODE_ENV: ${NODE_ENV}
+      CLIENT_URL: ${CLIENT_URL}
       PORT: ${PORT}
       MONGO_URI: ${MONGO_URI}
       MONGO_DB_NAME: ${MONGO_DB_NAME}

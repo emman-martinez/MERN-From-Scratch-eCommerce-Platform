@@ -11,6 +11,7 @@ dotenv.config({
 
 export const env = {
   NODE_ENV: envVar.get('NODE_ENV').default('development').asString(),
+  CLIENT_URL: envVar.get('CLIENT_URL').required().asString(),
   PORT: envVar.get('PORT').required().asPortNumber(),
   MONGO_URI: envVar.get('MONGO_URI').required().asString(),
   MONGO_DB_NAME: envVar.get('MONGO_DB_NAME').required().asString(),

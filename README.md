@@ -12,6 +12,76 @@ npm install --workspace backend
 npm install --workspace frontend
 ```
 
+### Add New Dependencies
+
+Install a dependency in the workspace that uses it.
+
+#### When Docker Is Running
+
+Install the dependency directly inside the affected container. This is the
+recommended development workflow because one command both updates the
+workspace's `package.json` and `package-lock.json` files on the host and
+installs the package in the container's `/app/node_modules` volume.
+
+For a frontend dependency:
+
+```powershell
+docker compose exec frontend npm install <package-name>
+```
+
+For a backend dependency:
+
+```powershell
+docker compose exec backend npm install <package-name>
+```
+
+Normally the running development server detects the change. If it keeps a
+previous dependency-resolution error, restart only the affected service:
+
+```powershell
+docker compose restart frontend
+docker compose restart backend
+```
+
+Do not run both restart commands unless dependencies changed in both services.
+
+#### When Running Without Docker
+
+From the project root, install a frontend-only dependency in the frontend
+workspace:
+
+```powershell
+npm install <package-name> --workspace frontend
+```
+
+For a backend-only library, use the backend workspace instead:
+
+```powershell
+npm install <package-name> --workspace backend
+```
+
+Although npm may physically place a dependency in the root `node_modules`
+directory through workspace hoisting, it is recorded in the corresponding
+workspace's `package.json` (for example, `frontend/package.json`).
+
+#### If a Dependency Was Installed Locally While Docker Is Running
+
+The containers use isolated `/app/node_modules` volumes, so changing the host's
+`node_modules` does not automatically install the dependency in a running
+container. Synchronize the affected container:
+
+```powershell
+docker compose exec frontend npm install
+docker compose exec backend npm install
+```
+
+Run only the command for the workspace that changed. Alternatively, rebuild
+the images and renew all anonymous `node_modules` volumes for both services:
+
+```powershell
+npm run docker:up:renew
+```
+
 Create your local environment file:
 
 ```powershell

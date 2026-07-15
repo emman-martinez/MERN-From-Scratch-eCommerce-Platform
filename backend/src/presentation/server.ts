@@ -2,6 +2,7 @@ import cors from 'cors';
 import express, { Router } from 'express';
 import type { Server as HttpServer } from 'http';
 import cookieParser from 'cookie-parser';
+import { env } from '../config/env.ts';
 import { errorHandler, notFound } from '../middleware/errorMiddleware.ts';
 
 interface Options {
@@ -31,7 +32,12 @@ export class Server {
     }
 
     //* Middlewares
-    this.app.use(cors()); // cors: Cross-Origin Resource Sharing
+    this.app.use(
+      cors({
+        origin: env.CLIENT_URL,
+        credentials: true,
+      }),
+    ); // cors: Cross-Origin Resource Sharing
     this.app.use(express.json()); // raw
     this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 

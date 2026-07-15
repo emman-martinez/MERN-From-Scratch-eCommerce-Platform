@@ -5,6 +5,8 @@ export const copy = {
   nav: {
     cart: "Cart",
     signIn: "Sign In",
+    profile: "Profile",
+    logout: "Logout",
   },
   home: {
     title: "Latest Products",
