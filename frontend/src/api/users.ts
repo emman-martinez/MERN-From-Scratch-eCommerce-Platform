@@ -6,3 +6,9 @@ export const userLogin = async ({ email, password }: UserLogin): Promise<User> =
   const response = await api.post<User>(`${USERS_URL}/auth`, { email, password });
   return response.data;
 };
+
+export const userLogout = async (): Promise<void> => {
+  const response = await api.post(`${USERS_URL}/logout`);
+
+  return response.data;
+};

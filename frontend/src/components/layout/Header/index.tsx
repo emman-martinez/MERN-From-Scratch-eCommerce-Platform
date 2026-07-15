@@ -1,16 +1,28 @@
 import { Badge, Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import { copy } from "../../../copy";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { logout } from "../../../store/slices/authSlice";
+import { useUserLogoutMutation } from "../../../hooks/useGetUserLogout";
 
 const Header = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { cartItems } = useAppSelector((state) => state.cart);
   const { userInfo } = useAppSelector((state) => state.auth);
+  const { logoutMutate, isSuccess, error } = useUserLogoutMutation();
 
   const logoutHandler = () => {
-    // Implement your logout logic here
+    logoutMutate();
+    if (isSuccess) {
+      dispatch(logout());
+      navigate("/login");
+    } else {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
