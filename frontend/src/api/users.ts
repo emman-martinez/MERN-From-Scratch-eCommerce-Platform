@@ -12,3 +12,8 @@ export const userLogout = async (): Promise<void> => {
 
   return response.data;
 };
+
+export const userRegister = async ({ name, email, password }: User): Promise<User> => {
+  const response = await api.post<User>(`${USERS_URL}`, { name, email, password });
+  return response.data;
+};

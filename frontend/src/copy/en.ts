@@ -33,6 +33,7 @@ export const copy = {
     checkout: "Proceed To Checkout",
   },
   login: {
+    title: "Login",
     signIn: "Sign In",
     emailAddress: "Email Address",
     enterEmail: "Enter email",
@@ -40,5 +41,10 @@ export const copy = {
     enterPassword: "Enter password",
     newCustomer: "New Customer?",
     register: "Register",
+    name: "Name",
+    enterName: "Enter name",
+    confirmPassword: "Confirm Password",
+    enterConfirmPassword: "Enter confirm password",
+    allReadyHaveAccount: "Already have an account?",
   },
 } as const;
