@@ -13,16 +13,18 @@ const Header = () => {
   const navigate = useNavigate();
   const { cartItems } = useAppSelector((state) => state.cart);
   const { userInfo } = useAppSelector((state) => state.auth);
-  const { logoutMutate, isSuccess, error } = useUserLogoutMutation();
+  const { logoutMutate } = useUserLogoutMutation();
 
   const logoutHandler = () => {
-    logoutMutate();
-    if (isSuccess) {
-      dispatch(logout());
-      navigate("/login");
-    } else {
-      console.error("Logout failed:", error);
-    }
+    logoutMutate(undefined, {
+      onSuccess: () => {
+        dispatch(logout());
+        navigate("/login");
+      },
+      onError: (error) => {
+        console.error("Logout failed:", error);
+      },
+    });
   };
 
   return (
