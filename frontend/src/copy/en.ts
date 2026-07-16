@@ -59,4 +59,10 @@ export const copy = {
     enterCountry: "Enter country",
     continue: "Continue",
   },
+  payment: {
+    title: "Payment",
+  },
+  placeOrder: {
+    title: "Place Order",
+  },
 } as const;

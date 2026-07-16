@@ -8,3 +8,10 @@ export type MessageProps = {
 export type FormContainerProps = {
   children: ReactNode;
 };
+
+export type CheckoutStepsProps = {
+  step1?: boolean;
+  step2?: boolean;
+  step3?: boolean;
+  step4?: boolean;
+};

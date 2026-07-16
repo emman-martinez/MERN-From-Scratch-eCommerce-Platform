@@ -5,6 +5,7 @@ import FormContainer from "../../components/FormContainer";
 import { copy } from "../../copy";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { saveShippingAddress } from "../../store/slices/cartSlice";
+import CheckoutSteps from "../../components/CheckoutSteps.tsx";
 
 const ShippingScreen = () => {
   const dispatch = useAppDispatch();
@@ -31,6 +32,8 @@ const ShippingScreen = () => {
 
   return (
     <FormContainer>
+      <CheckoutSteps step1 step2 />
+
       <h1>{copy.shipping.title}</h1>
 
       <Form onSubmit={submitHandler}>
