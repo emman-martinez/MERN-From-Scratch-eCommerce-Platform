@@ -47,4 +47,16 @@ export const copy = {
     enterConfirmPassword: "Enter confirm password",
     allReadyHaveAccount: "Already have an account?",
   },
+  shipping: {
+    title: "Shipping",
+    address: "Address",
+    enterAddress: "Enter address",
+    city: "City",
+    enterCity: "Enter city",
+    postalCode: "Postal Code",
+    enterPostalCode: "Enter postal code",
+    country: "Country",
+    enterCountry: "Enter country",
+    continue: "Continue",
+  },
 } as const;
