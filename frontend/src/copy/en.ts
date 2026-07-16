@@ -63,6 +63,10 @@ export const copy = {
     title: "Payment",
   },
   placeOrder: {
-    title: "Place Order",
+    title: "Place Method",
+    paypal: "PayPal",
+    selectMethod: "Select Method",
+    paypalOrCreditCard: "PayPal or Credit Card",
+    continue: "Continue",
   },
 } as const;

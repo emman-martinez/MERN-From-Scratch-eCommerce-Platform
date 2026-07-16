@@ -5,7 +5,7 @@ import FormContainer from "../../components/FormContainer";
 import { copy } from "../../copy";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { saveShippingAddress } from "../../store/slices/cartSlice";
-import CheckoutSteps from "../../components/CheckoutSteps.tsx";
+import CheckoutSteps from "../../components/CheckoutSteps";
 
 const ShippingScreen = () => {
   const dispatch = useAppDispatch();
