@@ -8,21 +8,41 @@ export class OrderController {
   // @route POST /api/orders
   // @access Private
   async addOrderItems(req: Request, res: Response) {
-    res.send('Add order items');
+    const createdOrder = await this.orderService.addOrderItems(req, res);
+
+    res.status(201).json(createdOrder);
   }
 
   // @desc Get logged in user orders
   // @route GET /api/orders/myorders
   // @access Private
   async getMyOrders(req: Request, res: Response) {
-    res.send('Get logged in user orders');
+    const userId = req.user?._id; // Assuming you have user information in the request object
+
+    if (!userId) {
+      res.status(401).json({ message: 'User not authenticated' });
+      return;
+    }
+
+    const orders = await this.orderService.getMyOrders(userId);
+
+    res.status(200).json(orders);
   }
 
   // @desc Get order by ID
   // @route GET /api/orders/:id
   // @access Private/Admin
   async getOrderById(req: Request, res: Response) {
-    res.send('Get order by ID');
+    const orderId = req.params.id;
+
+    const order = await this.orderService.getOrderById(orderId);
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    res.status(200).json(order);
   }
 
   // @desc Update order to paid

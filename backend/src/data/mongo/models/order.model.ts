@@ -1,4 +1,39 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, type HydratedDocument } from 'mongoose';
+
+export interface Order {
+  user: Schema.Types.ObjectId;
+  orderItems: {
+    _id?: Schema.Types.ObjectId;
+    name: string;
+    qty: number;
+    image: string;
+    price: number;
+    product: Schema.Types.ObjectId;
+  }[];
+  shippingAddress: {
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
+  paymentMethod: string;
+  paymentResult?: {
+    id?: string;
+    status?: string;
+    update_time?: string;
+    email_address?: string;
+  };
+  itemsPrice: number;
+  taxPrice: number;
+  shippingPrice: number;
+  totalPrice: number;
+  isPaid: boolean;
+  paidAt?: Date;
+  isDelivered: boolean;
+  deliveredAt?: Date;
+}
+
+export type OrderDocument = HydratedDocument<Order>;
 
 const orderSchema = new Schema(
   {
