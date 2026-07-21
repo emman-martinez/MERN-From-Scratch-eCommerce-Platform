@@ -8,20 +8,14 @@ export class OrderRoutes {
     const router = Router();
     const orderService = new OrderService();
     const controller = new OrderController(orderService);
-    const {
-      addOrderItems,
-      getMyOrders,
-      getOrderById,
-      updateOrderToPaid,
-      updateOrderToDelivered,
-      getOrders,
-    } = controller;
-
-    router.route('/').post(protect, addOrderItems).get(protect, admin, getOrders);
-    router.get('/mine', protect, getMyOrders);
-    router.get('/:id', protect, admin, getOrderById);
-    router.put('/:id/pay', protect, updateOrderToPaid);
-    router.put('/:id/deliver', protect, admin, updateOrderToDelivered);
+    router
+      .route('/')
+      .post(protect, controller.addOrderItems.bind(controller))
+      .get(protect, admin, controller.getOrders.bind(controller));
+    router.get('/mine', protect, controller.getMyOrders.bind(controller));
+    router.get('/:id', protect, admin, controller.getOrderById.bind(controller));
+    router.put('/:id/pay', protect, controller.updateOrderToPaid.bind(controller));
+    router.put('/:id/deliver', protect, admin, controller.updateOrderToDelivered.bind(controller));
 
     return router;
   }

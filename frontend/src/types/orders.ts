@@ -1,6 +1,7 @@
 export interface Order {
-  user: string;
-  orderItems: OrderItems[];
+  _id?: string;
+  user?: string;
+  orderItems: OrderItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: string;
   paymentResult?: PaymentResult;
@@ -14,7 +15,7 @@ export interface Order {
   deliveredAt?: Date;
 }
 
-interface OrderItems {
+export interface OrderItem {
   _id?: string;
   name: string;
   qty: number;

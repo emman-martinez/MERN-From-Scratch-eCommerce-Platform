@@ -24,7 +24,6 @@ export class OrderService {
 
   async addOrderItems(req: Request, res: Response) {
     const {
-      user,
       orderItems,
       shippingAddress,
       paymentMethod,
@@ -39,7 +38,7 @@ export class OrderService {
       throw new Error('No order items');
     } else {
       const order = new OrderModel({
-        user: user._id,
+        user: req?.user?._id, // Assuming you have user information in the request object
         orderItems: orderItems.map((item) => ({
           ...item,
           product: item._id,
