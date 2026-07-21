@@ -49,7 +49,21 @@ export class OrderController {
   // @route PUT /api/orders/:id/pay
   // @access Private
   async updateOrderToPaid(req: Request, res: Response) {
-    res.send('Update order to paid');
+    const orderId = req.params.id;
+    const paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+    const order = await this.orderService.updateOrderToPaid(orderId, paymentResult);
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    res.status(200).json(order);
   }
 
   // @desc Update order to delivered

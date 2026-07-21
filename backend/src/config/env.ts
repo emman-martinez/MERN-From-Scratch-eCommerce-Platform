@@ -16,4 +16,5 @@ export const env = {
   MONGO_URI: envVar.get('MONGO_URI').required().asString(),
   MONGO_DB_NAME: envVar.get('MONGO_DB_NAME').required().asString(),
   JWT_SECRET: envVar.get('JWT_SECRET').required().asString(),
+  PAYPAL_CLIENT_ID: envVar.get('PAYPAL_CLIENT_ID').required().asString(),
 };

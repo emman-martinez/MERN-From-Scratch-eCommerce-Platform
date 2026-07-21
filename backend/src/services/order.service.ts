@@ -67,7 +67,10 @@ export class OrderService {
     return order;
   }
 
-  async updateOrderToPaid(orderId: string, paymentResult: OrderDocument['paymentResult']) {
+  async updateOrderToPaid(
+    orderId: string | string[],
+    paymentResult: OrderDocument['paymentResult'],
+  ) {
     const order = await OrderModel.findById(orderId);
 
     if (order) {
