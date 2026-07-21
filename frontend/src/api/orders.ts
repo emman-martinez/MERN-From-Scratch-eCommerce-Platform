@@ -12,8 +12,14 @@ export const getOrderById = async (id: string): Promise<Order> => {
   return response.data;
 };
 
-export const payOrder = async (id: string, details: Record<string, unknown>): Promise<Order> => {
-  const response = await api.put(`${ORDERS_URL}/${id}/pay`, details);
+export const payOrder = async ({
+  orderId,
+  details,
+}: {
+  orderId: string;
+  details: Record<string, unknown>;
+}): Promise<Order> => {
+  const response = await api.put(`${ORDERS_URL}/${orderId}/pay`, details);
   return response.data;
 };
 

@@ -2,13 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { payOrder } from "../api/orders";
 
 interface PayOrderData {
-  id: string;
+  orderId: string;
   details: Record<string, unknown>;
 }
 
 export const usePayOrder = () => {
   const mutation = useMutation({
-    mutationFn: (data: PayOrderData) => payOrder(data.id, data.details),
+    mutationFn: ({ orderId, details }: PayOrderData) => payOrder({ orderId, details }),
   });
 
   return {
