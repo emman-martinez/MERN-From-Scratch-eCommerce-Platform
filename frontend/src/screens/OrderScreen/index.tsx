@@ -1,13 +1,44 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { /* PayPalButtons,  */ usePayPalScriptReducer } from "@paypal/react-paypal-js";
+// import { toast } from "react-toastify";
+// import { useAppSelector } from "../../store/hooks";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetOrderById } from "../../hooks/useGetOrderById";
+import { useGetPayPalClientId } from "../../hooks/useGetPayPalClientId";
+// import { usePayOrder } from "../../hooks/usePayOrder";
 
 const OrderScreen = () => {
   const { Item } = ListGroup;
   const { id: orderId } = useParams<{ id: string }>();
   const { data: order, error, isLoading } = useGetOrderById(orderId as string);
+  //  const { payOrder, isLoading: loadingPay } = usePayOrder();
+  const [, /* { isPending } */ paypalDispatch] = usePayPalScriptReducer();
+  const { paypal, isLoading: loadingPayPal, error: errorPayPal } = useGetPayPalClientId();
+  // const { userInfo } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!errorPayPal && !loadingPayPal && paypal?.clientId) {
+      const loadPayPalScript = async () => {
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": paypal.clientId,
+            currency: "USD",
+          },
+        });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      };
+
+      if (order && !order.isPaid) {
+        if (!window.paypal) {
+          loadPayPalScript();
+        }
+      }
+    }
+  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
   if (isLoading) return <Loader />;
   if (error) return <Message variant="danger">{error.message}</Message>;

@@ -1,5 +1,5 @@
 import { api } from "./axios";
-import { ORDERS_URL } from "../const";
+import { ORDERS_URL, PAYPAL_URL } from "../const";
 import type { Order } from "../types/orders";
 
 export const createOrder = async (order: Order): Promise<Order> => {
@@ -9,5 +9,15 @@ export const createOrder = async (order: Order): Promise<Order> => {
 
 export const getOrderById = async (id: string): Promise<Order> => {
   const response = await api.get(`${ORDERS_URL}/${id}`);
+  return response.data;
+};
+
+export const payOrder = async (id: string, details: Record<string, unknown>): Promise<Order> => {
+  const response = await api.put(`${ORDERS_URL}/${id}/pay`, details);
+  return response.data;
+};
+
+export const getPayPalClientId = async (): Promise<string> => {
+  const response = await api.get(`${PAYPAL_URL}`);
   return response.data;
 };

@@ -7,3 +7,7 @@ export const orderKeys = {
   all: ["orders"] as const,
   detail: (id: string) => ["order", id] as const,
 };
+
+export const paypalKeys = {
+  clientId: () => ["paypalClientId"] as const,
+};
