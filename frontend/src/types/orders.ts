@@ -1,6 +1,12 @@
+interface User {
+  _id?: string;
+  name: string;
+  email: string;
+}
+
 export interface Order {
   _id?: string;
-  user?: string;
+  user?: User;
   orderItems: OrderItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: string;

@@ -13,7 +13,7 @@ export class OrderRoutes {
       .post(protect, controller.addOrderItems.bind(controller))
       .get(protect, admin, controller.getOrders.bind(controller));
     router.get('/mine', protect, controller.getMyOrders.bind(controller));
-    router.get('/:id', protect, admin, controller.getOrderById.bind(controller));
+    router.get('/:id', protect, controller.getOrderById.bind(controller));
     router.put('/:id/pay', protect, controller.updateOrderToPaid.bind(controller));
     router.put('/:id/deliver', protect, admin, controller.updateOrderToDelivered.bind(controller));
 
