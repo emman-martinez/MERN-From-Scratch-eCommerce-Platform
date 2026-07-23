@@ -13,18 +13,18 @@ export class UserRoutes {
     router
       .route('/')
       .post(asyncHandler(controller.registerUser.bind(controller)))
-      .get(protect, admin, controller.getUsers);
+      .get(protect, admin, asyncHandler(controller.getUsers.bind(controller)));
     router.post('/logout', asyncHandler(controller.logoutUser.bind(controller)));
     router.post('/auth', asyncHandler(controller.authUser.bind(controller)));
     router
-      .route('/profile')
-      .get(protect, controller.getUserProfile)
-      .put(protect, controller.updateUserProfile);
+      .route('/profile/:id')
+      .get(protect, asyncHandler(controller.getUserProfile.bind(controller)))
+      .put(protect, asyncHandler(controller.updateUserProfile.bind(controller)));
     router
       .route('/:id')
-      .get(protect, admin, controller.getUserById)
-      .delete(protect, admin, controller.deleteUser)
-      .put(protect, admin, controller.updateUser);
+      .get(protect, admin, asyncHandler(controller.getUserById.bind(controller)))
+      .delete(protect, admin, asyncHandler(controller.deleteUser.bind(controller)))
+      .put(protect, admin, asyncHandler(controller.updateUser.bind(controller)));
 
     return router;
   }

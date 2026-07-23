@@ -17,3 +17,14 @@ export const userRegister = async ({ name, email, password }: User): Promise<Use
   const response = await api.post<User>(`${USERS_URL}`, { name, email, password });
   return response.data;
 };
+
+export const updateUserProfile = async ({
+  userId,
+  data,
+}: {
+  userId: string;
+  data: Partial<User>;
+}): Promise<User> => {
+  const response = await api.put<User>(`${USERS_URL}/profile/${userId}`, data);
+  return response.data;
+};

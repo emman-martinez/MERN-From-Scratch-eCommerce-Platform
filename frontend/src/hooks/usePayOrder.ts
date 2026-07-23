@@ -3,7 +3,7 @@ import { payOrder } from "../api/orders";
 
 interface PayOrderData {
   orderId: string;
-  details: Record<string, unknown>;
+  details: object;
 }
 
 export const usePayOrder = () => {

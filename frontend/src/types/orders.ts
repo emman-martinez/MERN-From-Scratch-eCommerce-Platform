@@ -16,9 +16,10 @@ export interface Order {
   shippingPrice: number;
   totalPrice: number;
   isPaid: boolean;
-  paidAt?: Date;
+  paidAt?: Date | string;
+  createdAt?: Date | string;
   isDelivered: boolean;
-  deliveredAt?: Date;
+  deliveredAt?: Date | string;
 }
 
 export interface OrderItem {

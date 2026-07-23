@@ -1,63 +1,81 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
+import { isAxiosError } from "axios";
 import { Link, useParams } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card /*, Button */ } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import type { CreateOrderActions, OnApproveActions, OnApproveData } from "@paypal/paypal-js";
 import { toast } from "react-toastify";
 // import { useAppSelector } from "../../store/hooks";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetOrderById } from "../../hooks/useGetOrderById";
 import { useGetPayPalClientId } from "../../hooks/useGetPayPalClientId";
-// import { usePayOrder } from "../../hooks/usePayOrder";
+import { usePayOrder } from "../../hooks/usePayOrder";
 
 const OrderScreen = () => {
   const { Item } = ListGroup;
   const { id: orderId } = useParams<{ id: string }>();
-  const { data: order, error, isLoading /* , refetch */ } = useGetOrderById(orderId as string);
-  // const { payOrder, isLoading: loadingPay } = usePayOrder();
+  const { data: order, error, isLoading, refetch } = useGetOrderById(orderId as string);
+  const { payOrder /* isLoading: loadingPay */ } = usePayOrder();
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { paypal, isLoading: loadingPayPal, error: errorPayPal } = useGetPayPalClientId();
   // const { userInfo } = useAppSelector((state) => state.auth);
 
-  // const onApproveTest = async () => {
-  //   try {
-  //     await payOrder({ orderId: orderId as string, details: { payer: {} } });
-  //     refetch();
-  //     toast.success("Order paid successfully");
-  //   } catch (err) {
-  //     const error = err as { data?: { message?: string }; message?: string };
-  //     toast.error(error?.data?.message || error?.message || "Error paying order");
-  //   }
-  // };
+  const onApproveTest = async () => {
+    await payOrder(
+      { orderId: orderId as string, details: { payer: {} } },
+      {
+        onSuccess: () => {
+          refetch();
+          toast.success("Order paid successfully");
+        },
+        onError: (error) => {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data.message
+            : undefined;
+          toast.error(message || "Error paying order");
+        },
+      },
+    );
+  };
 
-  // const createOrder = (data: any, actions) => {
-  //   return actions.order
-  //     .create({
-  //       purchase_units: [
-  //         {
-  //           amount: {
-  //             value: order?.totalPrice,
-  //           },
-  //         },
-  //       ],
-  //     })
-  //     .then((orderID: string) => {
-  //       return orderID;
-  //     });
-  // };
+  const createOrder = (_data: object, actions: CreateOrderActions) => {
+    return actions.order.create({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: order?.totalPrice.toFixed(2) ?? "0.00",
+          },
+        },
+      ],
+    });
+  };
 
-  // const onApprove = async (_data: object, actions: Record<string, any>) => {
-  //   return actions.order.capture().then(async function (details: Record<string, any>) {
-  //     try {
-  //       await payOrder({ orderId: orderId as string, details });
-  //       refetch();
-  //       toast.success("Order paid successfully");
-  //     } catch (err) {
-  //       const error = err as { data?: { message?: string }; message?: string };
-  //       toast.error(error?.data?.message || error?.message || "Error paying order");
-  //     }
-  //   });
-  // };
+  const onApprove = async (_data: OnApproveData, actions: OnApproveActions) => {
+    if (!actions.order) {
+      toast.error("Unable to capture the PayPal order");
+      return;
+    }
+
+    const details = await actions.order.capture();
+    await payOrder(
+      { orderId: orderId as string, details },
+      {
+        onSuccess: () => {
+          refetch();
+          toast.success("Order paid successfully");
+        },
+        onError: (error) => {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data.message
+            : undefined;
+          toast.error(message || "Error paying order");
+        },
+      },
+    );
+  };
 
   const onError = (err: { message: string }) => {
     toast.error(err.message);
@@ -108,7 +126,7 @@ const OrderScreen = () => {
               </p>
               {order?.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order?.deliveredAt?.toLocaleDateString()}
+                  Delivered on {(order?.deliveredAt as Date)?.toLocaleDateString()}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -121,7 +139,9 @@ const OrderScreen = () => {
                 <strong>Method: </strong> {order?.paymentMethod}
               </p>
               {order?.isPaid ? (
-                <Message variant="success">Paid on {order?.paidAt as ReactNode}</Message>
+                <Message variant="success">
+                  Paid on {(order?.paidAt as Date)?.toLocaleDateString()}
+                </Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}
@@ -184,18 +204,18 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      {/* <Button
+                      <Button
                         onClick={onApproveTest}
                         style={{
                           marginBottom: "10px",
                         }}
                       >
                         Test Pay Order
-                      </Button> */}
+                      </Button>
                       <div>
                         <PayPalButtons
-                          // createOrder={createOrder}
-                          // onApprove={onApprove}
+                          createOrder={createOrder}
+                          onApprove={onApprove}
                           onError={onError}
                         />
                       </div>

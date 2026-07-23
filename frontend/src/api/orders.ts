@@ -17,7 +17,7 @@ export const payOrder = async ({
   details,
 }: {
   orderId: string;
-  details: Record<string, unknown>;
+  details: object;
 }): Promise<Order> => {
   const response = await api.put(`${ORDERS_URL}/${orderId}/pay`, details);
   return response.data;
@@ -25,5 +25,10 @@ export const payOrder = async ({
 
 export const getPayPalClientId = async (): Promise<string> => {
   const response = await api.get(`${PAYPAL_URL}`);
+  return response.data;
+};
+
+export const getMyOrders = async (): Promise<Order[]> => {
+  const response = await api.get(`${ORDERS_URL}/mine`);
   return response.data;
 };
