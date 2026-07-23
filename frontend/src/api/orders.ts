@@ -37,3 +37,8 @@ export const getOrders = async (): Promise<Order[]> => {
   const response = await api.get(`${ORDERS_URL}`);
   return response.data;
 };
+
+export const deliverOrder = async (orderId: string): Promise<Order> => {
+  const response = await api.put(`${ORDERS_URL}/${orderId}/deliver`);
+  return response.data;
+};

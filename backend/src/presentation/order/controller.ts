@@ -70,7 +70,15 @@ export class OrderController {
   // @route PUT /api/orders/:id/deliver
   // @access Private/Admin
   async updateOrderToDelivered(req: Request, res: Response) {
-    res.send('Update order to delivered');
+    const orderId = req.params.id;
+    const order = await this.orderService.updateOrderToDelivered(orderId as string);
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    res.status(200).json(order);
   }
 
   // @desc Get all orders

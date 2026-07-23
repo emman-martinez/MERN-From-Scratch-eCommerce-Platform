@@ -5,21 +5,23 @@ import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import type { CreateOrderActions, OnApproveActions, OnApproveData } from "@paypal/paypal-js";
 import { toast } from "react-toastify";
-// import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetOrderById } from "../../hooks/useGetOrderById";
 import { useGetPayPalClientId } from "../../hooks/useGetPayPalClientId";
 import { usePayOrder } from "../../hooks/usePayOrder";
+import { useDeliverOrderMutation } from "../../hooks/useDeliverOrder";
 
 const OrderScreen = () => {
   const { Item } = ListGroup;
   const { id: orderId } = useParams<{ id: string }>();
   const { data: order, error, isLoading, refetch } = useGetOrderById(orderId as string);
-  const { payOrder /* isLoading: loadingPay */ } = usePayOrder();
+  const { payOrder, isLoading: loadingPay } = usePayOrder();
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { paypal, isLoading: loadingPayPal, error: errorPayPal } = useGetPayPalClientId();
-  // const { userInfo } = useAppSelector((state) => state.auth);
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const { deliverOrder, isLoading: loadingDeliver } = useDeliverOrderMutation();
 
   const onApproveTest = async () => {
     await payOrder(
@@ -79,6 +81,21 @@ const OrderScreen = () => {
 
   const onError = (err: { message: string }) => {
     toast.error(err.message);
+  };
+
+  const handleDeliverOrder = async () => {
+    await deliverOrder(orderId as string, {
+      onSuccess: () => {
+        refetch();
+        toast.success("Order delivered successfully");
+      },
+      onError: (error) => {
+        const message = isAxiosError<{ message?: string }>(error)
+          ? error.response?.data.message
+          : undefined;
+        toast.error(message || "Error delivering order");
+      },
+    });
   };
 
   useEffect(() => {
@@ -195,7 +212,8 @@ const OrderScreen = () => {
               </Item>
               {!order?.isPaid && (
                 <Item>
-                  {/* {loadingPay && <Loader />} */}
+                  {loadingPay && <Loader />}
+
                   {isPending ? (
                     <Loader />
                   ) : (
@@ -219,7 +237,15 @@ const OrderScreen = () => {
                   )}
                 </Item>
               )}
-              {/* MARK AS DELIVERED PLACEHOLDER */}
+
+              {loadingDeliver && <Loader />}
+              {userInfo && userInfo?.isAdmin && order?.isPaid && !order?.isDelivered && (
+                <Item>
+                  <Button type="button" className="btn btn-block" onClick={handleDeliverOrder}>
+                    Mark As Delivered
+                  </Button>
+                </Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
