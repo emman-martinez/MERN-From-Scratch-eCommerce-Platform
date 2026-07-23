@@ -100,7 +100,7 @@ export class OrderService {
   }
 
   async getOrders() {
-    const orders = await OrderModel.find({});
+    const orders = await OrderModel.find({}).populate('user', 'id name'); // Populate the user field with id and name
     return orders;
   }
 }

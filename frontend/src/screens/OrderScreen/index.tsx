@@ -125,9 +125,7 @@ const OrderScreen = () => {
                 {order?.shippingAddress.postalCode}, {order?.shippingAddress.country}
               </p>
               {order?.isDelivered ? (
-                <Message variant="success">
-                  Delivered on {(order?.deliveredAt as Date)?.toLocaleDateString()}
-                </Message>
+                <Message variant="success">Delivered on {String(order?.deliveredAt)}</Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
               )}
@@ -139,9 +137,7 @@ const OrderScreen = () => {
                 <strong>Method: </strong> {order?.paymentMethod}
               </p>
               {order?.isPaid ? (
-                <Message variant="success">
-                  Paid on {(order?.paidAt as Date)?.toLocaleDateString()}
-                </Message>
+                <Message variant="success">Paid on {String(order?.paidAt)}</Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}

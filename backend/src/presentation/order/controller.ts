@@ -77,6 +77,13 @@ export class OrderController {
   // @route GET /api/orders
   // @access Private/Admin
   async getOrders(req: Request, res: Response) {
-    res.send('Get all orders');
+    const orders = await this.orderService.getOrders();
+
+    if (!orders) {
+      res.status(404);
+      throw new Error('Orders not found');
+    }
+
+    res.status(200).json(orders);
   }
 }

@@ -32,3 +32,8 @@ export const getMyOrders = async (): Promise<Order[]> => {
   const response = await api.get(`${ORDERS_URL}/mine`);
   return response.data;
 };
+
+export const getOrders = async (): Promise<Order[]> => {
+  const response = await api.get(`${ORDERS_URL}`);
+  return response.data;
+};

@@ -5,6 +5,7 @@ export const productKeys = {
 
 export const orderKeys = {
   all: ["orders"] as const,
+  myOrders: ["myOrders"] as const,
   detail: (id: string) => ["order", id] as const,
 };
 
