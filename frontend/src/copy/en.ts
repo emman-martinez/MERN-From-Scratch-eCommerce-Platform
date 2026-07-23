@@ -7,6 +7,10 @@ export const copy = {
     signIn: "Sign In",
     profile: "Profile",
     logout: "Logout",
+    admin: "Admin",
+    products: "Products",
+    users: "Users",
+    orders: "Orders",
   },
   home: {
     title: "Latest Products",
