@@ -14,6 +14,7 @@ import OrderScreen from "../../screens/OrderScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
 import AdminRoute from "../../components/AdminRoute";
 import OrderListScreen from "../../screens/Admin/OrderListScreen/OrderListScreen";
+import ProductListScreen from "../../screens/Admin/OrderListScreen/ProductListScreen";
 
 const publicRoutes: RouteObject[] = [
   { index: true, element: <HomeScreen /> },
@@ -31,7 +32,10 @@ const privateRoutes: RouteObject[] = [
   { path: "/profile", element: <ProfileScreen /> },
 ];
 
-const adminRoutes: RouteObject[] = [{ path: "/admin/orderList", element: <OrderListScreen /> }];
+const adminRoutes: RouteObject[] = [
+  { path: "/admin/orderList", element: <OrderListScreen /> },
+  { path: "/admin/productList", element: <ProductListScreen /> },
+];
 
 export const router = createBrowserRouter([
   {

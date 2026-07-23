@@ -10,7 +10,12 @@ export class ProductsController {
   async getProducts(_req: Request, res: Response) {
     const products = await this.productService.getProducts();
 
-    res.json(products);
+    if (!products) {
+      res.status(404);
+      throw new Error('Products not found');
+    }
+
+    res.status(200).json(products);
   }
 
   // @desc Fetch single product
