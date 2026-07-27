@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import type { Types } from 'mongoose';
 import { ProductService } from '../../services/product.service.ts';
 
 export class ProductsController {
@@ -30,6 +31,33 @@ export class ProductsController {
     } else {
       res.status(404);
       throw new Error(`Product with ID ${productId} not found`);
+    }
+  }
+
+  // @desc Create a new product
+  // @route POST /api/products
+  // @access Public
+  async createProduct(req: Request, res: Response) {
+    const productData = {
+      user: req.user?._id as Types.ObjectId,
+      brand: 'Sample Brand',
+      category: 'Sample Category',
+      countInStock: 0,
+      description: 'Sample Description',
+      image: '/images/sample.jpg',
+      name: 'Sample Product',
+      numReviews: 0,
+      price: 0,
+      rating: 0,
+    };
+
+    const newProduct = await this.productService.createProduct(productData);
+
+    if (newProduct) {
+      res.status(201).json(newProduct);
+    } else {
+      res.status(400);
+      throw new Error('Failed to create product');
     }
   }
 }
