@@ -16,3 +16,8 @@ export const createProduct = async (): Promise<Product> => {
   const response = await api.post<Product>(`${PRODUCTS_URL}`);
   return response.data;
 };
+
+export const updateProduct = async (product: Product): Promise<Product> => {
+  const response = await api.put<Product>(`${PRODUCTS_URL}/${product._id}`, product);
+  return response.data;
+};

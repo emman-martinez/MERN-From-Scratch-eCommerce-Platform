@@ -36,4 +36,16 @@ export class ProductService {
     const createdProduct = await newProduct.save();
     return createdProduct;
   }
+
+  async updateProduct(id: string, productData: Partial<Product>) {
+    const product = await ProductModel.findById(id);
+
+    if (!product) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+
+    Object.assign(product, productData);
+    const updatedProduct = await product.save();
+    return updatedProduct;
+  }
 }

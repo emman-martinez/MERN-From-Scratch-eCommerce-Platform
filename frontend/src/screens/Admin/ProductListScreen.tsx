@@ -3,10 +3,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Message from "../../../components/Message";
-import Loader from "../../../components/Loader";
-import { useGetProducts } from "../../../hooks/useGetProducts";
-import { useCreateProductMutation } from "../../../hooks/useCreateProduct";
+import Message from "../../components/Message";
+import Loader from "../../components/Loader";
+import { useGetProducts } from "../../hooks/useGetProducts";
+import { useCreateProductMutation } from "../../hooks/useCreateProduct";
 
 const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProducts();

@@ -60,4 +60,29 @@ export class ProductsController {
       throw new Error('Failed to create product');
     }
   }
+
+  // @desc Update an existing product
+  // @route PUT /api/products/:id
+  // @access Public
+  async updateProduct(req: Request, res: Response) {
+    const productId = String(req.params.id);
+    const { name, price, description, image, brand, category } = req.body;
+    const updatedData = {
+      name,
+      price,
+      description,
+      image,
+      brand,
+      category,
+    };
+
+    const updatedProduct = await this.productService.updateProduct(productId, updatedData);
+
+    if (updatedProduct) {
+      res.status(200).json(updatedProduct);
+    } else {
+      res.status(404);
+      throw new Error(`Product with ID ${productId} not found`);
+    }
+  }
 }
