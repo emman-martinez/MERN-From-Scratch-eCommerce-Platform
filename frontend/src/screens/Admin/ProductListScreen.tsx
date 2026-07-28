@@ -7,10 +7,12 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetProducts } from "../../hooks/useGetProducts";
 import { useCreateProductMutation } from "../../hooks/useCreateProduct";
+import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 
 const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProducts();
   const { createProduct, isLoading: loadingCreate } = useCreateProductMutation();
+  const { isLoading: loadingDelete, deleteProduct } = useDeleteProduct();
 
   const handleCreateProduct = async () => {
     if (window.confirm("Are you sure you want to create a new product?")) {
@@ -23,6 +25,23 @@ const ProductListScreen = () => {
             ? error.response?.data.message
             : undefined;
           toast.error(message || "Error paying order");
+        },
+      });
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      await deleteProduct(id, {
+        onSuccess: () => {
+          toast.success("Product deleted successfully");
+          refetch();
+        },
+        onError: (error) => {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data.message
+            : undefined;
+          toast.error(message || "Error deleting product");
         },
       });
     }
@@ -41,6 +60,7 @@ const ProductListScreen = () => {
         </Col>
       </Row>
       {loadingCreate && <Loader />}
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -71,7 +91,11 @@ const ProductListScreen = () => {
                       <FaEdit />
                     </Button>
                   </LinkContainer>
-                  <Button variant="danger" className="btn-sm">
+                  <Button
+                    variant="danger"
+                    className="btn-sm"
+                    onClick={() => handleDeleteProduct(product._id)}
+                  >
                     <FaTrash
                       style={{
                         color: "white",

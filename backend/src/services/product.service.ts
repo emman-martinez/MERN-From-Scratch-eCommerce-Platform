@@ -48,4 +48,16 @@ export class ProductService {
     const updatedProduct = await product.save();
     return updatedProduct;
   }
+
+  async deleteProduct(id: string) {
+    const product = await ProductModel.findById(id);
+
+    if (!product) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+
+    await product.deleteOne();
+
+    return product;
+  }
 }

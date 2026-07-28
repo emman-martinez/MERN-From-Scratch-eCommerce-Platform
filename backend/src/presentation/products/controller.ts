@@ -66,7 +66,7 @@ export class ProductsController {
   // @access Public
   async updateProduct(req: Request, res: Response) {
     const productId = String(req.params.id);
-    const { name, price, description, image, brand, category } = req.body;
+    const { name, price, description, image, brand, category, countInStock } = req.body;
     const updatedData = {
       name,
       price,
@@ -74,12 +74,28 @@ export class ProductsController {
       image,
       brand,
       category,
+      countInStock,
     };
 
     const updatedProduct = await this.productService.updateProduct(productId, updatedData);
 
     if (updatedProduct) {
       res.status(200).json(updatedProduct);
+    } else {
+      res.status(404);
+      throw new Error(`Product with ID ${productId} not found`);
+    }
+  }
+
+  // @desc Delete a product
+  // @route DELETE /api/products/:id
+  // @access Public
+  async deleteProduct(req: Request, res: Response) {
+    const productId = String(req.params.id);
+    const deletedProduct = await this.productService.deleteProduct(productId);
+
+    if (deletedProduct) {
+      res.status(200).json(deletedProduct);
     } else {
       res.status(404);
       throw new Error(`Product with ID ${productId} not found`);

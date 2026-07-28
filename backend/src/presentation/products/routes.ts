@@ -16,7 +16,8 @@ export class ProductsRoutes {
     router
       .route('/:id')
       .get(controller.getProductById.bind(controller))
-      .put(protect, admin, controller.updateProduct.bind(controller));
+      .put(protect, admin, controller.updateProduct.bind(controller))
+      .delete(protect, admin, controller.deleteProduct.bind(controller));
 
     return router;
   }
