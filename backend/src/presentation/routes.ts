@@ -4,6 +4,7 @@ import { ProductsRoutes } from './products/routes.ts';
 import { UserRoutes } from './user/routes.ts';
 import { OrderRoutes } from './order/routes.ts';
 import { PaypalRoutes } from './paypal/routes.ts';
+import { UploadRoutes } from './upload/routes.ts';
 
 export class AppRoutes {
   static get routes(): Router {
@@ -15,6 +16,7 @@ export class AppRoutes {
     router.use('/api/users', UserRoutes.routes);
     router.use('/api/orders', OrderRoutes.routes);
     router.use('/api/config/paypal', PaypalRoutes.routes);
+    router.use('/api/upload', UploadRoutes.routes);
 
     return router;
   }

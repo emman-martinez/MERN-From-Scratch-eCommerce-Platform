@@ -1,7 +1,9 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Router } from 'express';
 import type { Server as HttpServer } from 'http';
-import cookieParser from 'cookie-parser';
+import path from 'path';
+
 import { env } from '../config/env.ts';
 import { errorHandler, notFound } from '../middleware/errorMiddleware.ts';
 
@@ -47,6 +49,10 @@ export class Server {
     //* Routes
     this.app.use(this.routes);
 
+    const __dirname = path.resolve(); // Get the absolute path of the current directory
+    this.app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); // Serve static files from the 'uploads' directory
+
+    //* Error handling middleware
     this.app.use(notFound); // 404 not found
     this.app.use(errorHandler); // error handler
 
