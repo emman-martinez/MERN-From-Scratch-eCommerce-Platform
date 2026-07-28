@@ -6,6 +6,7 @@ import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Loader from "../../../../components/Loader";
 import { useUpdateProductMutation } from "../../../../hooks/useUpdateProduct";
+import { useUploadProductImageMutation } from "../../../../hooks/useUploadProductImage";
 
 type ProductEditFormProps = {
   product: Product;
@@ -15,6 +16,7 @@ const ProductEditForm = ({ product, productId }: ProductEditFormProps) => {
   const { Group, Label, Control } = Form;
   const navigate = useNavigate();
   const { updateProduct, isLoading: loadingUpdate } = useUpdateProductMutation();
+  const { uploadProductImage, isLoading: loadingUpload } = useUploadProductImageMutation();
   const [name, setName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [image, setImage] = useState(product.image);
@@ -47,6 +49,28 @@ const ProductEditForm = ({ product, productId }: ProductEditFormProps) => {
           ? error.response?.data.message
           : undefined;
         toast.error(message || "Error updating product");
+      },
+    });
+  };
+
+  const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    await uploadProductImage(formData, {
+      onSuccess: (data) => {
+        setImage(data.image);
+        toast.success("Image uploaded successfully");
+      },
+      onError: (error) => {
+        const message = isAxiosError<{ message?: string }>(error)
+          ? error.response?.data.message
+          : undefined;
+        toast.error(message || "Error uploading image");
       },
     });
   };
@@ -84,6 +108,8 @@ const ProductEditForm = ({ product, productId }: ProductEditFormProps) => {
             value={image}
             onChange={(e) => setImage(e.target.value)}
           />
+          <Control type="file" onChange={handleUploadFile} />
+          {loadingUpload && <Loader />}
         </Group>
 
         <Group controlId="brand" className="my-2">
