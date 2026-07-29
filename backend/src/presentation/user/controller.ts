@@ -128,27 +128,77 @@ export class UserController {
   // @route GET /api/users
   // @access Private/Admin
   getUsers = async (req: Request, res: Response) => {
-    res.send('Get all users');
+    const users = await this.userService.getAllUsers();
+
+    if (!users) {
+      res.status(404);
+      throw new Error('No users found');
+    }
+
+    res.status(200).json(users);
   };
 
   // @desc Get user by ID
   // @route GET /api/users/:id
   // @access Private/Admin
   getUserById = async (req: Request, res: Response) => {
-    res.send('Get user by ID');
+    const userId = req.params.id;
+
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    res.status(200).json(user);
   };
 
   // @desc Delete user
   // @route DELETE /api/users/:id
   // @access Private/Admin
   deleteUser = async (req: Request, res: Response) => {
-    res.send('Delete user');
+    const userId = req.params.id;
+
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    if (user.isAdmin) {
+      res.status(403);
+      throw new Error('Cannot delete admin user');
+    }
+
+    await this.userService.deleteUser(user._id);
+
+    res.status(200).json({ message: 'User deleted successfully' });
   };
 
   // @desc Update user
   // @route PUT /api/users/:id
   // @access Private/Admin
   updateUser = async (req: Request, res: Response) => {
-    res.send('Update user');
+    const userId = req.params.id;
+
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    const { name, email, isAdmin } = req.body;
+
+    const updatedUser = await this.userService.updateUser(user, name, email, isAdmin);
+
+    res.status(200).json({
+      _id: updatedUser?._id,
+      name: updatedUser?.name,
+      email: updatedUser?.email,
+      isAdmin: updatedUser?.isAdmin,
+    });
   };
 }

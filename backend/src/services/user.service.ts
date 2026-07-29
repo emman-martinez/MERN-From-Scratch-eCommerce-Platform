@@ -71,4 +71,41 @@ export class UserService {
 
     return user;
   };
+
+  getAllUsers = async (): Promise<UserDocument[]> => {
+    const users = await UserModel.find({});
+
+    return users;
+  };
+
+  getUserById = async (userId: string | string[]): Promise<UserDocument | null> => {
+    const user = await UserModel.findById(userId).select('-password');
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  };
+
+  deleteUser = async (userId: Types.ObjectId): Promise<boolean> => {
+    await UserModel.deleteOne({ _id: userId });
+
+    return true;
+  };
+
+  updateUser = async (
+    user: UserDocument,
+    name: string,
+    email: string,
+    isAdmin: boolean,
+  ): Promise<UserDocument | null> => {
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.isAdmin = isAdmin;
+
+    const updatedUser = await user.save();
+
+    return updatedUser;
+  };
 }
