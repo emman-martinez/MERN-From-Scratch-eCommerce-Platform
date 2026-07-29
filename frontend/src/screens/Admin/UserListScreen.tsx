@@ -1,20 +1,38 @@
+import { isAxiosError } from "axios";
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button } from "react-bootstrap";
 import { FaTimes, FaTrash, FaEdit, FaCheck } from "react-icons/fa";
+import { toast } from "react-toastify";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetUsers } from "../../hooks/users/useGetUsers";
+import { useDeleteUser } from "../../hooks/users/useDeleteUser";
 
 const UserListScreen = () => {
-  const { data: users, isLoading, error } = useGetUsers();
+  const { data: users, isLoading, error, refetch } = useGetUsers();
+  const { deleteUser, isLoading: loadingDelete } = useDeleteUser();
 
-  //   const handleDelete = (id: string) => {
-  //     // Implement delete functionality here
-  //   };
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      await deleteUser(id, {
+        onSuccess: () => {
+          toast.success("User deleted successfully");
+          refetch();
+        },
+        onError: (error) => {
+          const message = isAxiosError<{ message?: string }>(error)
+            ? error.response?.data.message
+            : undefined;
+          toast.error(message || "Error deleting user");
+        },
+      });
+    }
+  };
 
   return (
     <>
       <h1>Users</h1>
+      {loadingDelete && <Loader />}
 
       {isLoading ? (
         <Loader />
@@ -55,7 +73,7 @@ const UserListScreen = () => {
                   <Button
                     variant="danger"
                     className="btn-sm"
-                    // onClick={() => handleDelete(user._id as string)}
+                    onClick={() => handleDelete(user._id as string)}
                   >
                     <FaTrash
                       style={{
