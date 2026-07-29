@@ -16,6 +16,8 @@ import AdminRoute from "../../components/AdminRoute";
 import OrderListScreen from "../../screens/Admin/OrderListScreen";
 import ProductListScreen from "../../screens/Admin/ProductListScreen";
 import ProductEditScreen from "../../screens/Admin/ProductEditScreen";
+import UserListScreen from "../../screens/Admin/UserListScreen";
+import UserEditScreen from "../../screens/Admin/UserEditScreen";
 
 const publicRoutes: RouteObject[] = [
   { index: true, element: <HomeScreen /> },
@@ -39,6 +41,14 @@ const adminRoutes: RouteObject[] = [
   {
     path: "/admin/product/:id/edit",
     element: <ProductEditScreen />,
+  },
+  {
+    path: "/admin/userList",
+    element: <UserListScreen />,
+  },
+  {
+    path: "/admin/user/:id/edit",
+    element: <UserEditScreen />,
   },
 ];
 

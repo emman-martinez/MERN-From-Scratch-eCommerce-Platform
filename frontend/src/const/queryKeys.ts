@@ -12,3 +12,8 @@ export const orderKeys = {
 export const paypalKeys = {
   clientId: () => ["paypalClientId"] as const,
 };
+
+export const userKeys = {
+  all: ["users"] as const,
+  detail: (id: string) => ["user", id] as const,
+};

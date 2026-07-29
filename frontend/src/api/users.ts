@@ -28,3 +28,29 @@ export const updateUserProfile = async ({
   const response = await api.put<User>(`${USERS_URL}/profile/${userId}`, data);
   return response.data;
 };
+
+export const getUsers = async (): Promise<User[]> => {
+  const response = await api.get<User[]>(`${USERS_URL}`);
+  return response.data;
+};
+
+export const getUserById = async (userId: string): Promise<User> => {
+  const response = await api.get<User>(`${USERS_URL}/${userId}`);
+  return response.data;
+};
+
+export const deleteUser = async (userId: string): Promise<void> => {
+  const response = await api.delete(`${USERS_URL}/${userId}`);
+  return response.data;
+};
+
+export const updateUser = async ({
+  userId,
+  data,
+}: {
+  userId: string;
+  data: Partial<User>;
+}): Promise<User> => {
+  const response = await api.put<User>(`${USERS_URL}/${userId}`, data);
+  return response.data;
+};
