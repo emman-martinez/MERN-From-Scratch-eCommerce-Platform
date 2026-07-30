@@ -6,11 +6,11 @@ import { useGetProducts } from "../../hooks/useGetProducts";
 import Message from "../../components/Message";
 
 const HomeScreen = () => {
-  const { data: products = [], error, isPending } = useGetProducts();
+  const { data: products = [], error, isLoading } = useGetProducts();
 
   return (
     <>
-      {isPending ? (
+      {isLoading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error.message}</Message>

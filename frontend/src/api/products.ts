@@ -26,3 +26,11 @@ export const deleteProduct = async (id: string): Promise<void> => {
   const response = await api.delete<void>(`${PRODUCTS_URL}/${id}`);
   return response.data;
 };
+
+export const createProductReview = async (
+  id: string,
+  review: { rating: number; comment: string },
+): Promise<void> => {
+  const response = await api.post<void>(`${PRODUCTS_URL}/${id}/reviews`, review);
+  return response.data;
+};

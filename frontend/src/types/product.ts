@@ -9,6 +9,13 @@ export interface Product {
   countInStock: number;
   rating: number;
   numReviews: number;
+  reviews: {
+    _id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    createdAt: string;
+  }[];
 }
 
 export type ProductProps = {
