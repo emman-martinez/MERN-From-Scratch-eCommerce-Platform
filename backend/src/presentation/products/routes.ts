@@ -19,6 +19,8 @@ export class ProductsRoutes {
       .put(protect, admin, controller.updateProduct.bind(controller))
       .delete(protect, admin, controller.deleteProduct.bind(controller));
 
+    router.route('/:id/reviews').post(protect, controller.createProductReview.bind(controller));
+
     return router;
   }
 }

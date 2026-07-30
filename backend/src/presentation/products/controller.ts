@@ -101,4 +101,25 @@ export class ProductsController {
       throw new Error(`Product with ID ${productId} not found`);
     }
   }
+
+  async createProductReview(req: Request, res: Response) {
+    const productId = String(req.params.id);
+    const { rating, comment } = req.body;
+
+    const reviewData = {
+      user: req.user?._id as Types.ObjectId,
+      name: req.user?.name as string,
+      rating,
+      comment,
+    };
+
+    const newReview = await this.productService.createProductReview(productId, reviewData);
+
+    if (newReview) {
+      res.status(201).json({ message: 'Review added', review: newReview });
+    } else {
+      res.status(404);
+      throw new Error(`Product with ID ${productId} not found`);
+    }
+  }
 }

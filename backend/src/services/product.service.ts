@@ -14,6 +14,13 @@ interface Product {
   rating: number;
 }
 
+interface ReviewData {
+  user: Types.ObjectId;
+  name: string;
+  rating: number;
+  comment: string;
+}
+
 export class ProductService {
   constructor() {}
 
@@ -59,5 +66,38 @@ export class ProductService {
     await product.deleteOne();
 
     return product;
+  }
+
+  async createProductReview(id: string, reviewData: ReviewData) {
+    const product = await ProductModel.findById(id);
+
+    if (!product) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+
+    const alreadyReviewed = product.reviews?.find(
+      (review) => review.user.toString() === reviewData.user.toString(),
+    );
+
+    if (alreadyReviewed) {
+      throw new Error('Product already reviewed by this user');
+    }
+
+    const newReview = {
+      user: reviewData.user,
+      name: reviewData.name,
+      comment: reviewData.comment,
+      rating: reviewData.rating,
+    };
+
+    product.reviews?.push(newReview);
+    product.numReviews = product.reviews?.length || 0;
+    product.rating =
+      product.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+        (product.reviews?.length || 1) || 0;
+
+    await product.save();
+
+    return newReview;
   }
 }
