@@ -7,6 +7,7 @@ export const useGetUserById = (id: string) => {
     queryKey: userKeys.detail(id),
     queryFn: () => getUserById(id),
     enabled: Boolean(id),
+    gcTime: 5 * 1000,
   });
 
   return { data, error, isPending };

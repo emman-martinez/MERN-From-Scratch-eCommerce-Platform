@@ -3,11 +3,15 @@ import type { User } from "../../types/users";
 import { updateUser } from "../../api/users";
 import { userKeys } from "../../const/queryKeys";
 
+interface UpdateUserPayload {
+  userId: string;
+  data: Partial<User>;
+}
+
 export const useUpdateUserMutation = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: ({ userId, data }: { userId: string; data: Partial<User> }) =>
-      updateUser({ userId, data }),
+    mutationFn: ({ userId, data }: UpdateUserPayload) => updateUser({ userId, data }),
     onSuccess: async (updatedUser) => {
       queryClient.setQueryData<User[]>(userKeys.all, (users) =>
         users?.map((user) => (user._id === updatedUser._id ? updatedUser : user)),
