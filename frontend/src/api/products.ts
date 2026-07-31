@@ -1,9 +1,10 @@
-import type { Product } from "../types/product";
+import type { Product, ProductParams } from "../types/product";
 import { api } from "./axios";
 import { PRODUCTS_URL } from "../const";
+import type { ProductData } from "../types/product";
 
-export const getProducts = async (): Promise<Product[]> => {
-  const response = await api.get<Product[]>(`${PRODUCTS_URL}`);
+export const getProducts = async ({ pageNumber }: ProductParams): Promise<ProductData> => {
+  const response = await api.get<ProductData>(`${PRODUCTS_URL}/?pageNumber=${pageNumber}`);
   return response.data;
 };
 

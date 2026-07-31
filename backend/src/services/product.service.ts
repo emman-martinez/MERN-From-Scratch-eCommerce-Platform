@@ -24,10 +24,14 @@ interface ReviewData {
 export class ProductService {
   constructor() {}
 
-  async getProducts() {
+  async getProducts({ pageSize, page }: { pageSize: number; page: number }) {
+    const count = await ProductModel.countDocuments();
+
     try {
-      const products = await ProductModel.find({});
-      return products;
+      const products = await ProductModel.find({})
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+      return { products, count };
     } catch {
       throw new Error('Error fetching products');
     }

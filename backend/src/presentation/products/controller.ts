@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type { Types } from 'mongoose';
 import { ProductService } from '../../services/product.service.ts';
+import { ProductModel } from '../../data/mongo/models/index.ts';
 
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
@@ -8,15 +9,18 @@ export class ProductsController {
   // @desc Fetch all products
   // @route GET /api/products
   // @access Public
-  async getProducts(_req: Request, res: Response) {
-    const products = await this.productService.getProducts();
+  async getProducts(req: Request, res: Response) {
+    const pageSize = 2;
+    const page = Number(req.query.pageNumber) || 1;
+
+    const { products, count } = await this.productService.getProducts({ pageSize, page });
 
     if (!products) {
       res.status(404);
       throw new Error('Products not found');
     }
 
-    res.status(200).json(products);
+    res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) });
   }
 
   // @desc Fetch single product
@@ -102,6 +106,9 @@ export class ProductsController {
     }
   }
 
+  // @desc Create a new review for a product
+  // @route POST /api/products/:id/reviews
+  // @access Public
   async createProductReview(req: Request, res: Response) {
     const productId = String(req.params.id);
     const { rating, comment } = req.body;

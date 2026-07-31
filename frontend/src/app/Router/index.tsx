@@ -21,6 +21,7 @@ import UserEditScreen from "../../screens/Admin/UserEditScreen";
 
 const publicRoutes: RouteObject[] = [
   { index: true, element: <HomeScreen /> },
+  { path: "/page/:pageNumber", element: <HomeScreen /> },
   { path: "/product/:id", element: <ProductScreen /> },
   { path: "/cart", element: <CartScreen /> },
   { path: "/login", element: <LoginScreen /> },

@@ -1,3 +1,8 @@
+export interface ProductData {
+  products: Product[];
+  page: number;
+  pages: number;
+}
 export interface Product {
   _id: string;
   name: string;
@@ -21,3 +26,7 @@ export interface Product {
 export type ProductProps = {
   product: Product;
 };
+
+export interface ProductParams {
+  pageNumber: number;
+}

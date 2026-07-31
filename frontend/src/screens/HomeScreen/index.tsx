@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Product from "../../components/Product";
@@ -6,7 +7,13 @@ import { useGetProducts } from "../../hooks/useGetProducts";
 import Message from "../../components/Message";
 
 const HomeScreen = () => {
-  const { data: products = [], error, isLoading } = useGetProducts();
+  const { pageNumber } = useParams<{ pageNumber: string }>();
+  const {
+    data = { products: [], page: 1, pages: 1 },
+    error,
+    isLoading,
+  } = useGetProducts({ pageNumber: Number(pageNumber) });
+  const { products } = data;
 
   return (
     <>
