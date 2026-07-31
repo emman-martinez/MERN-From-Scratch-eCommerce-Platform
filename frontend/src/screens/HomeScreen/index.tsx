@@ -5,15 +5,12 @@ import Product from "../../components/Product";
 import { copy } from "../../copy";
 import { useGetProducts } from "../../hooks/useGetProducts";
 import Message from "../../components/Message";
+import Paginate from "../../components/Paginate";
 
 const HomeScreen = () => {
   const { pageNumber } = useParams<{ pageNumber: string }>();
-  const {
-    data = { products: [], page: 1, pages: 1 },
-    error,
-    isLoading,
-  } = useGetProducts({ pageNumber: Number(pageNumber) });
-  const { products } = data;
+  const { data, error, isLoading } = useGetProducts({ pageNumber: Number(pageNumber) });
+  const { products, pages, page } = data || { products: [], pages: 1, page: 1 };
 
   return (
     <>
@@ -25,12 +22,13 @@ const HomeScreen = () => {
         <>
           <h1>{copy.home.title}</h1>
           <Row>
-            {products.map((product) => (
+            {products?.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
             ))}
           </Row>
+          <Paginate pages={pages} page={page} />
         </>
       )}
     </>

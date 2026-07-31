@@ -39,6 +39,7 @@ const privateRoutes: RouteObject[] = [
 const adminRoutes: RouteObject[] = [
   { path: "/admin/orderList", element: <OrderListScreen /> },
   { path: "/admin/productList", element: <ProductListScreen /> },
+  { path: "/admin/productList/:pageNumber", element: <ProductListScreen /> },
   {
     path: "/admin/product/:id/edit",
     element: <ProductEditScreen />,

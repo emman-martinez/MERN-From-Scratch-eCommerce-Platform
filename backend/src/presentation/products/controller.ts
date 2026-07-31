@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Types } from 'mongoose';
 import { ProductService } from '../../services/product.service.ts';
-import { ProductModel } from '../../data/mongo/models/index.ts';
-
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
@@ -10,7 +8,7 @@ export class ProductsController {
   // @route GET /api/products
   // @access Public
   async getProducts(req: Request, res: Response) {
-    const pageSize = 2;
+    const pageSize = 4;
     const page = Number(req.query.pageNumber) || 1;
 
     const { products, count } = await this.productService.getProducts({ pageSize, page });
