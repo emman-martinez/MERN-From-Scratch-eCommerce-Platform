@@ -1,5 +1,6 @@
 export const productKeys = {
   all: ["products"] as const,
+  list: (pageNumber: number) => ["products", pageNumber] as const,
   detail: (id: string) => ["product", id] as const,
 };
 
