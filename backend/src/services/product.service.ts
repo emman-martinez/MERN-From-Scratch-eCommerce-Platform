@@ -24,11 +24,19 @@ interface ReviewData {
 export class ProductService {
   constructor() {}
 
-  async getProducts({ pageSize, page }: { pageSize: number; page: number }) {
-    const count = await ProductModel.countDocuments();
+  async getProducts({
+    keyword,
+    pageSize,
+    page,
+  }: {
+    keyword: Record<string, unknown>;
+    pageSize: number;
+    page: number;
+  }) {
+    const count = await ProductModel.countDocuments({ ...keyword });
 
     try {
-      const products = await ProductModel.find({})
+      const products = await ProductModel.find({ ...keyword })
         .limit(pageSize)
         .skip(pageSize * (page - 1));
       return { products, count };

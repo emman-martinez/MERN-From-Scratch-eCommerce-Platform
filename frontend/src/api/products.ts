@@ -3,8 +3,13 @@ import { api } from "./axios";
 import { PRODUCTS_URL } from "../const";
 import type { ProductData } from "../types/product";
 
-export const getProducts = async ({ pageNumber }: ProductParams): Promise<ProductData> => {
-  const response = await api.get<ProductData>(`${PRODUCTS_URL}/?pageNumber=${pageNumber}`);
+export const getProducts = async ({ keyword, pageNumber }: ProductParams): Promise<ProductData> => {
+  const response = await api.get<ProductData>(PRODUCTS_URL, {
+    params: {
+      ...(pageNumber && { pageNumber }),
+      ...(keyword && { keyword }),
+    },
+  });
   return response.data;
 };
 

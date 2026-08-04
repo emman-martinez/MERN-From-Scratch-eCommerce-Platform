@@ -28,5 +28,6 @@ export type ProductProps = {
 };
 
 export interface ProductParams {
+  keyword: Record<string, unknown>;
   pageNumber: number;
 }

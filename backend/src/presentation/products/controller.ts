@@ -8,10 +8,18 @@ export class ProductsController {
   // @route GET /api/products
   // @access Public
   async getProducts(req: Request, res: Response) {
-    const pageSize = 4;
+    const pageSize = 8;
     const page = Number(req.query.pageNumber) || 1;
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: 'i',
+          },
+        }
+      : {};
 
-    const { products, count } = await this.productService.getProducts({ pageSize, page });
+    const { products, count } = await this.productService.getProducts({ keyword, pageSize, page });
 
     if (!products) {
       res.status(404);
