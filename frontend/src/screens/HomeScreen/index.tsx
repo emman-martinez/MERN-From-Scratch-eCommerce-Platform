@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Product from "../../components/Product";
@@ -14,6 +14,11 @@ const HomeScreen = () => {
 
   return (
     <>
+      {keyword && (
+        <Link className="btn btn-light mb-4" to="/">
+          Go Back
+        </Link>
+      )}
       {isLoading ? (
         <Loader />
       ) : error ? (
