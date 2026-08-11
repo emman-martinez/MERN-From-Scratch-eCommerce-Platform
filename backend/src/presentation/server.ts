@@ -52,6 +52,18 @@ export class Server {
     const __dirname = path.resolve(); // Get the absolute path of the current directory
     this.app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); // Serve static files from the 'uploads' directory
 
+    if (process.env.NODE_ENV === 'production') {
+      this.app.use(express.static(path.join(__dirname, '/frontend/build'))); // Serve static files from the 'frontend/build' directory
+
+      this.app.get('*', (_req, res) => {
+        res.sendFile(path.join(__dirname, '/frontend/build/index.html')); // Serve the index.html file for any unmatched routes (SPA routing)
+      });
+    } else {
+      this.app.get('/', (_req, res) => {
+        res.send('API is running...');
+      });
+    }
+
     //* Error handling middleware
     this.app.use(notFound); // 404 not found
     this.app.use(errorHandler); // error handler
