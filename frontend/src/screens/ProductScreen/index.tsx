@@ -11,6 +11,7 @@ import Message from "../../components/Message";
 import { addToCart } from "../../store/slices/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useCreateNewReview } from "../../hooks/products/useCreateNewReview";
+import Meta from "../../components/Meta";
 
 const ProductScreen = () => {
   const dispatch = useAppDispatch();
@@ -66,6 +67,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error.message}</Message>
       ) : (
         <>
+          <Meta title={product?.name} />
           <Row>
             <Col md={5}>
               <Image src={product?.image} alt={product?.name} fluid />

@@ -7,7 +7,7 @@ import { useGetProductById } from "../../../hooks/useGetProductById";
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
-  const { data: product, isPending, error } = useGetProductById(productId!);
+  const { data: product, isLoading, error } = useGetProductById(productId!);
 
   return (
     <>
@@ -16,7 +16,7 @@ const ProductEditScreen = () => {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
-        {isPending ? (
+        {isLoading ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">{error.message}</Message>
