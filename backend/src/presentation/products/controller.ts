@@ -135,4 +135,13 @@ export class ProductsController {
       throw new Error(`Product with ID ${productId} not found`);
     }
   }
+
+  // @desc Get top rated products
+  // @route GET /api/products/top
+  // @access Public
+  async getTopProducts(req: Request, res: Response) {
+    const topProducts = await this.productService.getTopProducts();
+
+    res.status(200).json(topProducts);
+  }
 }

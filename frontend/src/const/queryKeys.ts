@@ -2,6 +2,7 @@ export const productKeys = {
   all: ["products"] as const,
   list: (keyword: string, pageNumber: number) => ["products", keyword, pageNumber] as const,
   detail: (id: string) => ["product", id] as const,
+  top: () => ["topProducts"] as const,
 };
 
 export const orderKeys = {

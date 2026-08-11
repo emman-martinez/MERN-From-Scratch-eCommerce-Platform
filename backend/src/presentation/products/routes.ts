@@ -13,12 +13,12 @@ export class ProductsRoutes {
       .route('/')
       .get(controller.getProducts.bind(controller))
       .post(protect, admin, controller.createProduct.bind(controller));
+    router.route('/top').get(controller.getTopProducts.bind(controller));
     router
       .route('/:id')
       .get(controller.getProductById.bind(controller))
       .put(protect, admin, controller.updateProduct.bind(controller))
       .delete(protect, admin, controller.deleteProduct.bind(controller));
-
     router.route('/:id/reviews').post(protect, controller.createProductReview.bind(controller));
 
     return router;

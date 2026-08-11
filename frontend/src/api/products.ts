@@ -40,3 +40,8 @@ export const createProductReview = async (
   const response = await api.post<void>(`${PRODUCTS_URL}/${id}/reviews`, review);
   return response.data;
 };
+
+export const getTopProducts = async (): Promise<Product[]> => {
+  const response = await api.get<Product[]>(`${PRODUCTS_URL}/top`);
+  return response.data;
+};

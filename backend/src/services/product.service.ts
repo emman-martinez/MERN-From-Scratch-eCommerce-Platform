@@ -112,4 +112,9 @@ export class ProductService {
 
     return newReview;
   }
+
+  async getTopProducts() {
+    const topProducts = await ProductModel.find({}).sort({ rating: -1 }).limit(3);
+    return topProducts;
+  }
 }
