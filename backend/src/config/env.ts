@@ -17,4 +17,7 @@ export const env = {
   MONGO_DB_NAME: envVar.get('MONGO_DB_NAME').required().asString(),
   JWT_SECRET: envVar.get('JWT_SECRET').required().asString(),
   PAYPAL_CLIENT_ID: envVar.get('PAYPAL_CLIENT_ID').required().asString(),
+  CLOUDINARY_CLOUD_NAME: envVar.get('CLOUDINARY_CLOUD_NAME').default('').asString(),
+  CLOUDINARY_API_KEY: envVar.get('CLOUDINARY_API_KEY').default('').asString(),
+  CLOUDINARY_API_SECRET: envVar.get('CLOUDINARY_API_SECRET').default('').asString(),
 };

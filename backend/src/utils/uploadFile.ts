@@ -1,18 +1,5 @@
 import multer from 'multer';
-import { mkdirSync } from 'node:fs';
-import path from 'path';
-
-const uploadDirectory = path.resolve('uploads');
-mkdirSync(uploadDirectory, { recursive: true });
-
-export const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDirectory);
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
+import path from 'node:path';
 
 export const checkFileType = (file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   const filetypes = /jpeg|jpg|png/;
@@ -27,5 +14,9 @@ export const checkFileType = (file: Express.Multer.File, cb: multer.FileFilterCa
 };
 
 export const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
+  fileFilter: (_req, file, cb) => checkFileType(file, cb),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
 });

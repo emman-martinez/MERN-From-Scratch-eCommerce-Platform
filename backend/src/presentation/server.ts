@@ -50,8 +50,6 @@ export class Server {
     this.app.use(this.routes);
 
     const __dirname = path.resolve(); // Get the absolute path of the current directory
-    this.app.use('/uploads', express.static(path.join(__dirname, '/uploads'))); // Serve static files from the 'uploads' directory
-
     if (process.env.NODE_ENV === 'production') {
       this.app.use(express.static(path.join(__dirname, '/frontend/build'))); // Serve static files from the 'frontend/build' directory
 

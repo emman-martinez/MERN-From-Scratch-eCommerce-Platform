@@ -14,7 +14,10 @@ export const generateToken = (res: Response, userId: Types.ObjectId) => {
   res.cookie('jwt', token, {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    // Vercel and Render use different origins. `none` is required for the
+    // browser to send the secure cookie between those services.
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
+    path: '/',
     maxAge: THIRTY_DAYS_IN_MS,
   });
 };
