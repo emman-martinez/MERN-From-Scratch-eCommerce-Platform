@@ -209,16 +209,19 @@ consistent with the URI.
 
 Create a **Web Service** from the GitHub repository.
 
-Use these settings for this monorepo:
+Use these settings for this monorepo. The explicit `--prefix backend` commands
+avoid accidentally installing the workspace root (which also runs the local
+Husky hook setup) and make the service work even when Render starts commands
+from the repository root:
 
-| Render field      | Value                                   |
-| ----------------- | --------------------------------------- |
-| Root Directory    | `backend`                               |
-| Runtime           | Node                                    |
-| Build Command     | `npm ci && npm run build`               |
-| Start Command     | `npm start`                             |
-| Health Check Path | `/api/health`                           |
-| Branch            | your production branch, normally `main` |
+| Render field      | Value                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| Root Directory    | _(leave empty)_                                                                            |
+| Runtime           | Node                                                                                       |
+| Build Command     | `npm --prefix backend ci --include=dev --ignore-scripts && npm --prefix backend run build` |
+| Start Command     | `npm --prefix backend run start`                                                           |
+| Health Check Path | `/api/health`                                                                              |
+| Branch            | your production branch, normally `main`                                                    |
 
 The backend package already provides `build` and `start` scripts. Render should
 provide the `PORT` environment variable; the application must listen on it.
